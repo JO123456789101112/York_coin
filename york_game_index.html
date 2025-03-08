@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>لعبة الحرب ثنائية الأبعاد - محسّنة</title>
+  <style>
+    body { 
+      margin: 0; 
+      overflow: hidden; 
+      background: #111; 
+      touch-action: manipulation;
+    }
+    /* تغيير الخلفية إلى تدرج لوني عصري */
+    #gameArea {
+      position: relative; 
+      width: 100vw; 
+      height: 100vh; 
+      background: linear-gradient(45deg, #2980b9, #6dd5fa);
+    }
+    .player {
+      position: absolute;
+      width: 50px;   
+      height: 50px;  
+      background-color: blue;
+      border: 2px solid white;
+      border-radius: 10px;
+    }
+    .player.enemy {
+      background-color: red;
+    }
+    .laser {
+      position: absolute;
+      width: 15px;
+      height: 4px;
+      background: linear-gradient(to right, #ff0000, #ff8000);
+      border-radius: 2px;
+      box-shadow: 0 0 8px rgba(255, 100, 0, 0.8);
+    }
+    .controls {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      text-align: center;
+    }
+    .btn {
+      display: inline-block;
+      width: 50px;
+      height: 50px;
+      background: rgba(4, 47, 90, 0.932);
+      margin: 5px;
+      border-radius: 10px;
+      line-height: 50px;
+      font-size: 24px;
+      color: rgba(217, 255, 1, 0.896);
+      user-select: none;
+    }
+    /* تقليل حجم النص ليكون مناسباً للجوال */
+    #healthDisplay {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      color: rgb(145, 12, 12);
+      font-size: 30px;
+      z-index: 1000;
+    }
+    #killDisplay {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      color: white;
+      font-size: 30px;
+      z-index: 1000;
+    }
+    /* ستايل لاسم اللاعب فوق كل لاعب */
+    .playerName {
+      position: absolute;
+      top: -18px;
+      left: 0;
+      width: 100%;
+      font-size: 12px;
+      text-align: center;
+      color: #fff;
+      background: rgba(0,0,0,0.5);
+      border-radius: 3px;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="gameArea">
+    <h4 style="color:rgb(43, 96, 8);">1 kill = 1 York$</h4>
+    <div id="player" class="player"></div>
+    <div id="healthDisplay">Health: 100</div>
+    <div id="killDisplay">Kills: 0</div>
+  </div>
+
+  <div class="controls">
+    <div class="btn" id="upBtn">▲</div>
+    <div class="btn" id="leftBtn">◀</div>
+    <div class="btn" id="shootBtn">★</div>
+    <div class="btn" id="rightBtn">▶</div>
+    <div class="btn" id="downBtn">▼</div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    // استخراج معطيات الـ query string
+    function getQueryParams() {
+      const params = {};
+      const queryString = window.location.search.substring(1);
+      const pairs = queryString.split("&");
+      for (let pair of pairs) {
+        const [key, value] = pair.split("=");
+        params[key] = decodeURIComponent(value);
+      }
+      return params;
+    }
+    
+    const queryParams = getQueryParams();
+    const userIdentifier = queryParams.userIdentifier || null;
+    const entryMode = queryParams.entryMode || "free"; // paid أو free
+    const coinAmount = queryParams.coinAmount ? parseInt(queryParams.coinAmount) : 0;
+
+    const socket = io();
+    socket.on('connect', () => {
+      socket.emit('registerEntry', { userIdentifier, entryMode, coinAmount });
+    });
+
+    const playerDiv = document.getElementById('player');
+    const gameArea = document.getElementById('gameArea');
+    const healthDisplay = document.getElementById('healthDisplay');
+    const killDisplay = document.getElementById('killDisplay');
+    let playerX, playerY;
+    let health = 100;
+    let killCount = 0;
+    let lastDirection = 180;
+    const lasers = [];
+
+    // تحديث عداد القتلى في الواجهة
+    function updateKillDisplay() {
+      killDisplay.textContent = "Kills: " + killCount;
+    }
+
+    function checkCollision(rect1, rect2) {
+      return !(rect1.x > rect2.x + rect2.width || 
+               rect1.x + rect1.width < rect2.x ||
+               rect1.y > rect2.y + rect2.height ||
+               rect1.y + rect1.height < rect2.y);
+    }
+
+    function updatePlayerPosition() {
+      const gameWidth = window.innerWidth;
+      const gameHeight = window.innerHeight;
+      const playerWidth = playerDiv.offsetWidth;
+      const playerHeight = playerDiv.offsetHeight;
+      
+      if (playerX < 0) playerX = 0;
+      if (playerY < 0) playerY = 0;
+      if (playerX > gameWidth - playerWidth) playerX = gameWidth - playerWidth;
+      if (playerY > gameHeight - playerHeight) playerY = gameHeight - playerHeight;
+      
+      playerDiv.style.left = playerX + 'px';
+      playerDiv.style.top = playerY + 'px';
+      socket.emit('move', { x: playerX, y: playerY });
+    }
+
+    socket.on('init', (data) => {
+      playerX = data.x;
+      playerY = data.y;
+      updatePlayerPosition();
+    });
+
+    function setupContinuousMovement(btn, directionCallback) {
+      let interval;
+      btn.addEventListener('touchstart', () => { interval = setInterval(directionCallback, 50); });
+      btn.addEventListener('touchend', () => { clearInterval(interval); });
+      btn.addEventListener('mousedown', () => { interval = setInterval(directionCallback, 50); });
+      btn.addEventListener('mouseup', () => { clearInterval(interval); });
+      btn.addEventListener('mouseleave', () => { clearInterval(interval); });
+    }
+
+    setupContinuousMovement(document.getElementById('leftBtn'), () => { 
+      playerX -= 10; 
+      lastDirection = 180; 
+      updatePlayerPosition(); 
+    });
+    setupContinuousMovement(document.getElementById('rightBtn'), () => { 
+      playerX += 10; 
+      lastDirection = 0; 
+      updatePlayerPosition(); 
+    });
+    setupContinuousMovement(document.getElementById('upBtn'), () => { 
+      playerY -= 10; 
+      lastDirection = 270; 
+      updatePlayerPosition(); 
+    });
+    setupContinuousMovement(document.getElementById('downBtn'), () => { 
+      playerY += 10; 
+      lastDirection = 90; 
+      updatePlayerPosition(); 
+    });
+
+    function shoot() {
+      const angle = lastDirection;
+      const laserStartX = playerX + playerDiv.offsetWidth / 2;
+      const laserStartY = playerY + playerDiv.offsetHeight / 2;
+      const laser = document.createElement('div');
+      laser.className = 'laser';
+      laser.style.left = laserStartX + 'px';
+      laser.style.top = laserStartY + 'px';
+      gameArea.appendChild(laser);
+      lasers.push({
+        element: laser,
+        x: laserStartX,
+        y: laserStartY,
+        angle: angle,
+        speed: 15,
+        isEnemy: false
+      });
+      socket.emit('shoot', { x: playerX, y: playerY, angle: angle });
+    }
+
+    document.getElementById('shootBtn').addEventListener('touchstart', shoot);
+    document.getElementById('shootBtn').addEventListener('click', shoot);
+
+    // استقبال اللاعبين الحاليين مع عرض الاسم فوقهم
+    socket.on('existingPlayers', (players) => {
+      players.forEach((player) => {
+        if(!document.getElementById('player_' + player.socketId)) {
+          const enemy = document.createElement('div');
+          enemy.className = 'player enemy';
+          enemy.id = 'player_' + player.socketId;
+          enemy.style.left = player.x + 'px';
+          enemy.style.top = player.y + 'px';
+          enemy.dataset.health = 10; // صحة 10 ضربات
+          const nameText = player.name ? player.name : "Anonymous";
+          const nameDiv = document.createElement('div');
+          nameDiv.className = 'playerName';
+          nameDiv.textContent = nameText;
+          enemy.appendChild(nameDiv);
+          gameArea.appendChild(enemy);
+        }
+      });
+    });
+
+    socket.on('newPlayer', (data) => {
+      if(!document.getElementById('player_' + data.socketId)) {
+        const enemy = document.createElement('div');
+        enemy.className = 'player enemy';
+        enemy.id = 'player_' + data.socketId;
+        enemy.style.left = data.x + 'px';
+        enemy.style.top = data.y + 'px';
+        enemy.dataset.health = 10; // صحة 10 ضربات
+        const nameText = data.name ? data.name : "Anonymous";
+        const nameDiv = document.createElement('div');
+        nameDiv.className = 'playerName';
+        nameDiv.textContent = nameText;
+        enemy.appendChild(nameDiv);
+        gameArea.appendChild(enemy);
+      }
+    });
+
+    socket.on('playerMoved', (data) => {
+      const enemy = document.getElementById('player_' + data.socketId);
+      if(enemy) {
+        enemy.style.left = data.x + 'px';
+        enemy.style.top = data.y + 'px';
+      }
+    });
+
+    socket.on('playerShot', (data) => {
+      const enemyLaser = document.createElement('div');
+      enemyLaser.className = 'laser';
+      const startX = data.x + 25;
+      const startY = data.y + 25;
+      enemyLaser.style.left = startX + 'px';
+      enemyLaser.style.top = startY + 'px';
+      gameArea.appendChild(enemyLaser);
+      lasers.push({
+        element: enemyLaser,
+        x: startX,
+        y: startY,
+        angle: data.angle,
+        speed: 15,
+        isEnemy: true
+      });
+    });
+
+    socket.on('playerDisconnected', (data) => {
+      const enemy = document.getElementById('player_' + data.socketId);
+      if(enemy) { gameArea.removeChild(enemy); }
+    });
+
+    // تحديث حالة الطلقات مع التحقق من الاصطدام مع الخصوم
+    function updateLasers() {
+      for (let i = lasers.length - 1; i >= 0; i--) {
+        let laserObj = lasers[i];
+        const rad = laserObj.angle * Math.PI / 180;
+        laserObj.x += laserObj.speed * Math.cos(rad);
+        laserObj.y += laserObj.speed * Math.sin(rad);
+        laserObj.element.style.left = laserObj.x + 'px';
+        laserObj.element.style.top = laserObj.y + 'px';
+
+        // إزالة الطلقة إذا خرجت من الشاشة
+        if (laserObj.x < -50 || laserObj.x > window.innerWidth + 50 ||
+            laserObj.y < -50 || laserObj.y > window.innerHeight + 50) {
+          if(laserObj.element.parentNode) {
+            laserObj.element.parentNode.removeChild(laserObj.element);
+          }
+          lasers.splice(i, 1);
+          continue;
+        }
+
+        // للطَلقات من اللاعب: التحقق من الاصطدام مع خصوم اللعبة
+        if(!laserObj.isEnemy) {
+          const enemies = document.getElementsByClassName('player enemy');
+          for (let j = 0; j < enemies.length; j++) {
+            const enemy = enemies[j];
+            const enemyRect = enemy.getBoundingClientRect();
+            const laserRect = laserObj.element.getBoundingClientRect();
+            if(checkCollision(laserRect, enemyRect)) {
+              // عند اصطدام الطلقة بالخصم، نقص صحته بمقدار 1
+              let currentHealth = parseInt(enemy.dataset.health) || 10;
+              currentHealth -= 1;
+              enemy.dataset.health = currentHealth;
+              // إزالة الطلقة بعد كل ضربة
+              if(laserObj.element.parentNode) {
+                laserObj.element.parentNode.removeChild(laserObj.element);
+              }
+              lasers.splice(i, 1);
+              // إذا وصلت صحة الخصم إلى 0، قم بحذفه وتحديث العدادات
+              if(currentHealth <= 0) {
+                enemy.parentNode.removeChild(enemy);
+                killCount++;
+                updateKillDisplay();
+                updateUserGameCoins(1); // إضافة 1 York$ لكل قتل
+              }
+              break;
+            }
+          }
+        } else {
+          // للطَلقات المعادية: التحقق من اصطدامها مع اللاعب
+          const playerRect = { 
+            x: playerX, 
+            y: playerY, 
+            width: playerDiv.offsetWidth, 
+            height: playerDiv.offsetHeight 
+          };
+          const laserRect = { 
+            x: laserObj.x, 
+            y: laserObj.y, 
+            width: laserObj.element.offsetWidth, 
+            height: laserObj.element.offsetHeight 
+          };
+          if(checkCollision(playerRect, laserRect)) {
+            if(laserObj.element.parentNode) {
+              laserObj.element.parentNode.removeChild(laserObj.element);
+            }
+            lasers.splice(i, 1);
+            health -= 10;
+            if(health < 0) health = 0;
+            healthDisplay.textContent = 'Health: ' + health;
+            if(health === 0) {
+              console.log("Game Over!");
+              socket.disconnect();
+              window.location.href = "die.html";
+              return;
+            }
+          }
+        }
+      }
+    }
+    
+    function updateUserGameCoins(coinIncrease) {
+      const userIdentifier = localStorage.getItem("userIdentifier");
+      if (!userIdentifier) return;
+      fetch('/api/update-game-coins', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userIdentifier, coinIncrease })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          console.log("Coins updated successfully. New York$ balance:", data.yorkBalance);
+        } else {
+          console.error("Error updating coins:", data.message);
+        }
+      })
+      .catch(err => console.error(err));
+    }
+
+    function updateGame() {
+      updateLasers();
+      requestAnimationFrame(updateGame);
+    }
+    updateGame();
+  </script>
+</body>
+</html>

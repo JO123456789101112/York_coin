@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Withdrawal Success</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f8ff;
+            padding: 20px;
+        }
+        h1 {
+            color: green;
+            font-size: 36px;
+        }
+        h2 {
+            font-size: 24px;
+        }
+        #balance {
+            color: green;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        input[type="file"] {
+            margin-top: 20px;
+            padding: 10px;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>مبروك تم سحب</h1>
+    <h2>رصيدك كان: <span id="balance"></span> جنيه</h2>
+
+    <!-- خانة لرفع صورة -->
+    <input type="file" id="screenshot" accept="image/*">
+    <button>رفع الصورة</button>
+
+    <script>
+        // استرجاع الرصيد المرسل عبر الرابط
+        const urlParams = new URLSearchParams(window.location.search);
+        const balance = urlParams.get('balance');
+
+        // عرض الرصيد في الصفحة
+        document.getElementById('balance').textContent = balance;
+
+        // يمكنك إضافة الوظائف الخاصة برفع الصورة هنا
+    </script>
+
+</body>
+</html>

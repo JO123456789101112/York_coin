@@ -1,0 +1,15 @@
+[env]
+PORT = "3000"
+MONGO_URI = "mongodb+srv://john:john@john.gevwwjw.mongodb.net/yorktelegramBot?retryWrites=true&w=majority&appName=john"
+
+[[services]]
+internal_port = 3000
+protocol = "tcp"
+
+[services.concurrency]
+type = "connections"
+hard_limit = 250
+soft_limit = 200
+
+[services.http_checks]
+path = "/"

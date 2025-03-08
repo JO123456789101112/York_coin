@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Task Page</title>
+  <style>
+    body {
+      background-image: url("/background.jpg");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      background-attachment: fixed;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    .navbar {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 0;
+      box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.5);
+      overflow: hidden;
+    }
+
+    .marquee {
+      width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      position: relative;
+    }
+
+    .moving-text {
+      display: inline-block;
+      white-space: nowrap;
+      animation: moveText 13s linear infinite alternate;
+      font-size: 18px;
+      font-weight: bold;
+      color: yellow;
+    }
+
+    @keyframes moveText {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+
+    .task-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      padding: 20px;
+      width: 80%;
+      margin-top: 50px;
+    }
+
+    .task-box {
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+      padding: 20px;
+      text-align: center;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .task-box:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    #bottomNav {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.7);
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      padding: 10px 0;
+    }
+
+    #bottomNav div {
+      color: white;
+      text-align: center;
+      flex: 1;
+      padding: 5px;
+      cursor: pointer;
+    }
+
+    #bottomNav div:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+
+    @media (max-width: 600px) {
+      .task-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <div class="marquee">
+      <span class="moving-text" onclick="window.location.href='/airdrop.html'">🎁 Airdrop 🎁</span>
+    </div>
+  </div>
+
+  <div class="task-container">
+    <div class="task-box" id="task1" onclick="completeTask(1, 'https://t.me/blockchain_Crypto_Weel')">Join Channel</div>
+    <div class="task-box" id="task2" onclick="completeTask(2, 'https://t.me/supermoneygetfree')">Join Channel</div>
+    <div class="task-box" id="task3" onclick="completeTask(3, '/task3-link')">Task 3</div>
+    <div class="task-box" id="task4" onclick="completeTask(4, '/task4-link')">Task 4</div>
+    <div class="task-box" id="task5" onclick="completeTask(5, '/task5-link')">Task 5</div>
+    <div class="task-box" id="task6" onclick="completeTask(6, '/task6-link')">Task 6</div>
+  </div>
+
+  <div id="bottomNav">
+    <div id="home" onclick="window.location.href='/';">🏠 Home</div>
+    <div id="tasks" onclick="window.location.href='/task.html';">📋 Tasks</div>
+    <div id="airdrop" onclick="window.location.href='/games.html';">🎮 Game</div>
+  </div>
+
+  <script>
+function completeTask(taskId, taskLink) {
+  fetch('/task-completed', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ taskId: taskId })
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log(`Task ${taskId} completed. Total tasks completed: ${data.tasksCompleted}`);
+    
+    let taskElement = document.getElementById(`task${taskId}`);
+    taskElement.style.backgroundColor = "gray";
+    taskElement.style.cursor = "not-allowed";
+    taskElement.onclick = null;
+
+    window.location.href = taskLink;
+  })
+  .catch(err => console.error('Error sending task completion data:', err));
+}
+  </script>
+</body>
+</html>
