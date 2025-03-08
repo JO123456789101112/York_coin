@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5552195743866818"
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5552195743866818"
      crossorigin="anonymous"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -109,6 +109,22 @@
         grid-template-columns: repeat(2, 1fr);
       }
     }
+    #ad-container {
+      width: 80%;
+      max-width: 800px;
+      margin: 30px auto;
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 20px;
+      text-align: center;
+      border-radius: 10px;
+    }
+
+    @media (max-width: 600px) {
+      .task-container {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -126,6 +142,21 @@
     <div class="task-box" id="task5" onclick="completeTask(5, '/task5-link')">Task 5</div>
     <div class="task-box" id="task6" onclick="completeTask(6, '/task6-link')">Task 6</div>
   </div>
+
+  <div id="ad-container">
+    <p>Advertisement</p>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5552195743866818" crossorigin="anonymous"></script>
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="ca-pub-5552195743866818"
+         data-ad-slot="1234567890"
+         data-ad-format="auto"
+         data-full-width-responsive="true"></ins>
+    <script>
+         (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
+  </div>
+
 
   <div id="bottomNav">
     <div id="home" onclick="window.location.href='/';">🏠 Home</div>
@@ -158,3 +189,4 @@ function completeTask(taskId, taskLink) {
   </script>
 </body>
 </html>
+
