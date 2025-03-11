@@ -6,11 +6,12 @@
   <title>Character Shop</title>
   <style>
 body {
-  background-image: url("/background.jpg");
-  background-repeat: no-repeat;  /* عدم تكرار الخلفية */
-  background-size: cover;         /* تغطية كامل الصفحة */
+  /* تدرج لوني من اللبني الفاتح إلى أزرق غامق */
+  background: linear-gradient(to bottom, #b3e5fc, #0288d1);
+  /* إزالة خصائص صورة الخلفية إذا كانت موجودة */
+  background-repeat: no-repeat;
   background-attachment: fixed;
-  background-position: center;    /* لضبط موضع الصورة في المنتصف */
+  background-position: center;
   display: flex;
   flex-direction: column;
   align-items: center;
