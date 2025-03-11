@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Character Shop</title>
+  <style>
+    body {
+      background-image: url("/background.jpg");
+      background-size: cover;
+      background-attachment: fixed;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: white;
+      font-family: 'Poppins', sans-serif;
+      text-align: center;
+      min-height: 450vh;
+      margin: 0;
+    }
+    .navbar {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 20px;
+      box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.5);
+    }
+    .store-container {
+      margin-top: 0px;
+      width: 92%;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .family-container {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      top: 50px;
+    }
+    .character {
+      width: 45%;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 10px;
+      border-radius: 10px;
+      margin: 10px;
+      text-align: center;
+      transition: background-color 0.5s;
+    }
+    .character img {
+      width: 100px;
+      height: 100px;
+    }
+    .buy-button {
+      background: yellow;
+      color: black;
+      border: none;
+      padding: 5px;
+      cursor: pointer;
+    }
+    #bottomNav {
+      display: flex;
+      justify-content: space-around;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      position: fixed;
+      bottom: 0;
+      padding: 10px 0;
+    }
+    #bottomNav div {
+      color: white;
+      text-align: center;
+      padding: 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <div id="yorkAmount">York$ = <span id="yorkBalance">??</span></div>
+  </div>
+
+  <div class="family-container">
+    <img src="/boymirror.png" width="150">
+    <img src="/monstermirror.png" width="150">
+  </div>
+  <h1> York$ متجر عائله </h1>
+
+  <div class="store-container" id="store">
+    <!-- Characters will be added here dynamically -->
+  </div>
+
+  <div id="bottomNav">
+    <div onclick="window.location.href='/'">🏠 Home</div>
+    <div onclick="window.location.href='/task.html'">📋 Tasks</div>
+    <div onclick="window.location.href='/games.html'">🎮 Game</div>
+  </div>
+
+  <script>
+    const characters = [
+      { id: "السريع", img: "/family6.png", price: 10 },
+      { id: "الغبي", img: "/family10.png", price: 50 },
+      { id: "الخفي", img: "/family9.png", price: 100 },
+      { id: "الشرير", img: "/family8.png", price: 250 },
+      { id: "الوجوه", img: "/family7.png", price: 300 },
+      { id: "الملك", img: "/family5.png", price: 350 },
+      { id: "الملكه", img: "/family11.png", price: 400 },
+      { id: "الجميله", img: "/family3.png", price: 500 },
+      { id: "الحكيم", img: "/family4.png", price: 650 },
+      { id: "الخارق", img: "/family2.png", price: 1000 }
+    ];
+  
+    function loadStore() {
+      const store = document.getElementById("store");
+      characters.forEach(char => {
+        const charDiv = document.createElement("div");
+        charDiv.classList.add("character");
+        charDiv.id = "character-" + char.id;
+        charDiv.innerHTML = `
+          <img src="${char.img}" alt="Character ${char.id}">
+          <p>اسم الوحش  ${char.id}</p>
+          <p>السعر: ${char.price} York$</p>
+          <button class="buy-button" onclick="buyCharacter('${char.id}', ${char.price}, '${char.img}')">شراء</button>
+        `;
+        store.appendChild(charDiv);
+      });
+    }
+  
+    function buyCharacter(id, price, img) {
+      let userIdentifier = localStorage.getItem("userIdentifier");
+      console.log("Buying skin for user:", userIdentifier, "Price:", price, "Skin:", img);
+      let yorkBalance = parseInt(document.getElementById("yorkBalance").textContent) || 0;
+      if (yorkBalance >= price) {
+        fetch("/api/buy-skin", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ 
+            userIdentifier, 
+            amount: price,
+            skin: img
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            document.getElementById("yorkBalance").textContent = data.yorkBalance;
+            // تغيير لون الخلفية إلى أخضر عند نجاح الشراء
+            document.getElementById("character-" + id).style.backgroundColor = "green";
+          } else {
+            // تغيير لون الخلفية إلى أحمر إذا حدث خطأ
+            document.getElementById("character-" + id).style.backgroundColor = "red";
+          }
+        })
+        .catch(err => {
+          console.error("Error:", err);
+          document.getElementById("character-" + id).style.backgroundColor = "red";
+        });
+      } else {
+        // تغيير لون الخلفية إلى برتقالي إذا لم يكن هناك رصيد كافٍ
+        document.getElementById("character-" + id).style.backgroundColor = "orange";
+      }
+    }
+  
+    function updateYorkBalance() {
+      fetch(`/getUserData?userIdentifier=${localStorage.getItem("userIdentifier")}`)
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById("yorkBalance").textContent = data.yorkBalance || 0;
+        });
+    }
+  
+    updateYorkBalance();
+    loadStore();
+  </script>
+</body>
+</html>
