@@ -5,19 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Character Shop</title>
   <style>
-    body {
-      background-image: url("/background.jpg");
-      background-size: cover;
-      background-attachment: fixed;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      color: white;
-      font-family: 'Poppins', sans-serif;
-      text-align: center;
-      min-height: 450vh;
-      margin: 0;
-    }
+body {
+  background-image: url("/background.jpg");
+  background-repeat: no-repeat;  /* عدم تكرار الخلفية */
+  background-size: auto;         /* أبعاد الصورة الطبيعية */
+  background-attachment: fixed;
+  background-position: center;   /* لضبط موضع الصورة في المنتصف */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+  min-height: 450vh;
+  margin: 0;
+}
+
     .navbar {
       width: 100%;
       background: rgba(0, 0, 0, 0.8);
@@ -80,11 +83,24 @@
       padding: 10px;
       cursor: pointer;
     }
+    .small-coin {
+  width: 30px !important;
+  height: 30px !important;
+  vertical-align: middle;
+  margin-left: 5px;
+}
+.vsmall-coin {
+  width: 20px !important;
+  height: 20px !important;
+  vertical-align: middle;
+  margin-left: 0px;
+}
+
   </style>
 </head>
 <body>
   <div class="navbar">
-    <div id="yorkAmount">York$ = <span id="yorkBalance">??</span></div>
+    <div id="yorkAmount">York$ = <span id="yorkBalance">??</span><img src="/coin.png" class="small-coin"></div>
   </div>
 
   <div class="family-container">
@@ -126,7 +142,7 @@
         charDiv.innerHTML = `
           <img src="${char.img}" alt="Character ${char.id}">
           <p>اسم الوحش  ${char.id}</p>
-          <p>السعر: ${char.price} York$</p>
+          <p>York$ السعر: <img src="/coin.png" class="vsmall-coin"> ${char.price}</p>
           <button class="buy-button" onclick="buyCharacter('${char.id}', ${char.price}, '${char.img}')">شراء</button>
         `;
         store.appendChild(charDiv);
