@@ -1,11 +1,10 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5552195743866818"
-     crossorigin="anonymous"></script>
-<meta name="google-adsense-account" content="ca-pub-5552195743866818">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5552195743866818" crossorigin="anonymous"></script>
   <meta charset="UTF-8">
+  <meta name="google-adsense-account" content="ca-pub-5552195743866818">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Tap Game</title>
   <style>
     body {
@@ -20,12 +19,11 @@
       font-family: 'Poppins', sans-serif;
       color: white;
       text-align: center;
-      touch-action: manipulation; /* يمنع التكبير عند الضغط */
+      touch-action: manipulation;
     }
-
     .navbar {
       width: 100%;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0,0,0,0.8);
       position: fixed;
       top: 0;
       left: 0;
@@ -33,16 +31,14 @@
       align-items: center;
       justify-content: center;
       padding: 10px 0;
-      box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.5);
+      box-shadow: 0px 2px 10px rgba(0,0,0,0.5);
     }
-
     .marquee {
       width: 100%;
       overflow: hidden;
       white-space: nowrap;
       position: relative;
     }
-
     .moving-text {
       display: inline-block;
       animation: moveText 13s linear infinite alternate;
@@ -51,12 +47,10 @@
       color: yellow;
       cursor: pointer;
     }
-
     @keyframes moveText {
       0% { transform: translateX(100%); }
       100% { transform: translateX(-100%); }
     }
-
     .container {
       display: flex;
       flex-direction: column;
@@ -65,65 +59,55 @@
       flex-grow: 1;
       margin-top: 60px;
     }
-
     .info-box {
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(0,0,0,0.6);
       padding: 15px 25px;
       border-radius: 12px;
-      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.5);
       margin-bottom: 15px;
     }
-
     h1 {
       font-size: 24px;
       margin-bottom: 10px;
     }
-
     .stat-box {
       display: flex;
       justify-content: center;
       gap: 15px;
     }
-
     .stat {
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(255,255,255,0.2);
       padding: 10px 20px;
       border-radius: 8px;
       font-size: 18px;
       font-weight: bold;
-      box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.4);
+      box-shadow: 0px 2px 5px rgba(0,0,0,0.4);
     }
-
     img {
       width: 150px;
       cursor: pointer;
       transition: transform 0.2s ease-in-out;
     }
-
     img:hover {
       transform: scale(1.1);
     }
-
     img:active {
       animation: tapEffect 0.2s ease-in-out;
     }
-
     @keyframes tapEffect {
       0% { transform: scale(1.1); }
       50% { transform: scale(0.9); }
       100% { transform: scale(1); }
     }
-
     #bottomNav {
       display: flex;
       justify-content: space-around;
       width: 100%;
-      background: rgba(0, 0, 0, 0.7);
+      background: rgba(0,0,0,0.7);
       position: fixed;
       bottom: 0;
       padding: 10px 0;
     }
-
     #bottomNav div {
       color: white;
       flex: 1;
@@ -132,42 +116,84 @@
       font-size: 16px;
       cursor: pointer;
     }
-
     #airdrop {
       color: yellow;
       font-weight: bold;
     }
-
     .small-text {
       font-size: small;
     }
-
-
     #story-container {
-    position: fixed;
-    right: 10px;
-    top: 50px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  @keyframes waveText {
-  0%, 100% { transform: translateY(0); }
-  25% { transform: translateY(-5px); }
-  50% { transform: translateY(5px); }
-  75% { transform: translateY(-5px); }
-}
-
-
-  #logo {
-    width: 90px;
-    height: 100px;
-    cursor: pointer;
-    animation: waveText 1.5s infinite ease-in-out;
-  }
+      position: fixed;
+      right: 10px;
+      top: 50px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    @keyframes waveText {
+      0%,100% { transform: translateY(0); }
+      25% { transform: translateY(-5px); }
+      50% { transform: translateY(5px); }
+      75% { transform: translateY(-5px); }
+    }
+    #logo {
+      width: 90px;
+      height: 110px;
+      cursor: pointer;
+      animation: waveText 1.5s infinite ease-in-out;
+    }
+    /* تصميم المودال */
+    .modal {
+      display: none; /* مخفي افتراضيًا */
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .modal-content {
+      background: #333;
+      padding: 20px;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 300px;
+      text-align: center;
+    }
+    .modal-content input {
+      width: 90%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 5px;
+    }
+    .modal-content button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .modal-content button:hover {
+      background-color: #0056b3;
+    }
   </style>
 </head>
 <body>
+  <!-- مودال لطلب اسم المستخدم -->
+  <div id="nameModal" class="modal">
+    <div class="modal-content">
+      <h2>ادخل اسم المستخدم</h2>
+      <input type="text" id="userNameInput" placeholder="اسم المستخدم">
+      <button onclick="saveUserName()">حفظ</button>
+    </div>
+  </div>
 
   <div class="navbar">
     <div class="marquee">
@@ -175,14 +201,9 @@
     </div>
   </div>
   <div id="story-container">
-
     <a href="mystory.html"><img src="/boymirror.png" id="logo"></a>
-
-</div>
+  </div>
   <div class="container">
-
-
-
     <div class="info-box">
       <h1 id="userName">Welcome, User!</h1>
       <div class="stat-box">
@@ -198,31 +219,64 @@
     </div>
     <img src="/caracter.png" id="tapImage" alt="Tap to earn points">
   </div>
-
   <div id="bottomNav">
     <div onclick="window.location.href='/'">🏠 Home</div>
     <div onclick="window.location.href='/task.html'">📋 Tasks</div>
     <div id="airdrop" onclick="window.location.href='/games.html'">🎮 Game</div>
   </div>
-
   <script>
+    // عند تحميل الصفحة، إذا لم يتم تعيين userIdentifier أو userName، تظهر المودال
     let userIdentifier = localStorage.getItem('userIdentifier');
     let userName = localStorage.getItem('userName');
 
     if (!userIdentifier || !userName) {
-      userIdentifier = 'user-' + Date.now();
-      userName = prompt("Enter your name:") || "User";
-      localStorage.setItem('userIdentifier', userIdentifier);
-      localStorage.setItem('userName', userName);
+      document.getElementById('nameModal').style.display = 'flex';
+    } else {
+      document.getElementById('userName').textContent = `Welcome, ${userName}!`;
     }
 
-    document.getElementById('userName').textContent = `Welcome, ${userName}!`;
+    function saveUserName() {
+      let inputName = document.getElementById('userNameInput').value.trim();
+      if (inputName === "") {
+        alert("يرجى إدخال اسم المستخدم");
+        return;
+      }
+      userIdentifier = 'user-' + Date.now();
+      userName = inputName;
+      localStorage.setItem('userIdentifier', userIdentifier);
+      localStorage.setItem('userName', userName);
+      document.getElementById('userName').textContent = `Welcome, ${userName}!`;
+      document.getElementById('nameModal').style.display = 'none';
+      // إرسال البيانات إلى السيرفر لتسجيل اسم المستخدم في قاعدة البيانات
+      fetch('/saveUserData', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userIdentifier, userName })
+      })
+      .then(response => response.json())
+      .then(data => console.log('User data saved:', data))
+      .catch(err => console.error('Error saving user data:', err));
+    }
 
     function updateUI(counter, yorkBalance) {
       document.getElementById('counter').textContent = counter;
       document.getElementById('york').textContent = yorkBalance;
     }
 
+    function loadUserData() {
+      fetch(`/getUserData?userIdentifier=${userIdentifier}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.exists) {
+            updateUI(data.userCounter, data.yorkBalance);
+            if (data.skin) {
+              document.getElementById("tapImage").src = data.skin;
+            }
+          }
+        })
+        .catch(err => console.error('Error:', err));
+    }
+  
     document.getElementById('tapImage').addEventListener('click', function () {
       fetch('/increment', {
         method: 'POST',
@@ -235,15 +289,8 @@
       })
       .catch(err => console.error('Error:', err));
     });
-
-    fetch(`/getUserData?userIdentifier=${userIdentifier}`)
-      .then(response => response.json())
-      .then(data => {
-        if (data.exists) {
-          updateUI(data.userCounter, data.yorkBalance);
-        }
-      })
-      .catch(err => console.error('Error:', err));
+  
+    loadUserData();
   </script>
 </body>
 </html>
