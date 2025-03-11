@@ -83,6 +83,7 @@ app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 app.get('/games.html', (req, res) => res.sendFile(path.join(__dirname, 'games.html')));
 app.get('/airdrop.html', (req, res) => res.sendFile(path.join(__dirname, 'airdrop.html')));
 app.get('/task.html', (req, res) => res.sendFile(path.join(__dirname, 'task.html')));
+app.get('/mystory.html', (req, res) => res.sendFile(path.join(__dirname, 'mystory.html')));
 
 // صفحة اللعبة الرئيسية
 app.get('/york_game_index.html', (req, res) => {
