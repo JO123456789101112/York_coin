@@ -5,7 +5,7 @@
      crossorigin="anonymous"></script>
   <meta charset="UTF-8">
   <meta name="google-adsense-account" content="ca-pub-5552195743866818">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Airdrop</title>
   <style>
     body {
@@ -18,13 +18,12 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      height: 100vh;
+      height: 90vh;
       margin: 0;
       font-family: 'Poppins', sans-serif;
       color: white;
       text-align: center;
     }
-
     .navbar {
       width: 100%;
       background: rgba(0, 0, 0, 0.8);
@@ -37,12 +36,10 @@
       padding: 10px 20px;
       box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.5);
     }
-
     .marquee {
       overflow: hidden;
       white-space: nowrap;
     }
-
     .moving-text {
       display: inline-block;
       white-space: nowrap;
@@ -51,42 +48,62 @@
       font-weight: bold;
       color: yellow;
     }
-
     @keyframes moveText {
       0% { transform: translateX(100%); }
       100% { transform: translateX(-100%); }
     }
-
-    /* تم استبدال معرف العنصر ليعكس York$ بدلاً من Dream$ */
-    #yorkAmount {
-      font-size: 18px;
-      font-weight: bold;
-      color: white;
-    }
-
-    .airdrop-container {
-      background-color: rgba(0, 0, 0, 0.7);
+    /* مربع فتوره السحب */
+    .airdrop-box {
+      background-color: black;
       padding: 20px;
       border-radius: 10px;
-      text-align: center;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      margin: 20px 0;
+      width: 300px;
     }
-
-    .airdrop-option {
-      padding: 15px;
-      margin: 10px;
-      border-radius: 5px;
+    .airdrop-box h1 {
+      margin: 0 0 10px 0;
+      font-size: 22px;
+    }
+    .airdrop-box h2 {
+      margin: 0 0 10px 0;
+      font-size: 18px;
+    }
+    .airdrop-box p {
+      margin: 5px 0;
+      font-size: 18px;
+    }
+    .airdrop-box button {
+      margin-top: 15px;
+      padding: 10px 20px;
       background-color: #007bff;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
       color: white;
       cursor: pointer;
-      font-size: 18px;
       transition: background-color 0.3s;
     }
-
-    .airdrop-option:hover {
+    .airdrop-box button:hover {
       background-color: #0056b3;
     }
-
+    /* صورة العملة الكبيرة المتحركة */
+    .rotating-coin {
+      width: 200px;
+      height: 200px;
+      margin: 10px 0 10px 0; /* ترك مسافة تحت الناف بار */
+      animation: spin 6s linear infinite;
+    }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    /* الصورة الصغيرة للعملة */
+    .small-coin {
+      width: 30px;
+      height: 30px;
+      vertical-align: middle;
+      margin-left: 5px;
+    }
     #bottomNav {
       display: flex;
       justify-content: space-around;
@@ -97,7 +114,6 @@
       left: 0;
       padding: 10px 0;
     }
-
     #bottomNav div {
       color: white;
       flex: 1;
@@ -106,25 +122,30 @@
       font-size: 16px;
       cursor: pointer;
     }
-
-    #airdrop {
-      color: yellow;
-      font-weight: bold;
-    }
   </style>
 </head>
 <body>
   <div class="navbar">
-    <div id="yorkAmount">York$ = <span id="yorkBalance">??</span></div>
+    <div id="yorkAmount">
+      York$ = <span id="yorkBalance">??</span>
+      <!-- الصورة الصغيرة تظهر بجانب النص -->
+      <img src="/coin.png" class="small-coin" alt="coin">
+    </div>
     <div class="marquee">
       <span class="moving-text" onclick="window.location.href='/airdrop.html'">🎁 Airdrop 🎁</span>
     </div>
   </div>
-
-  <img src="/caracter.png" alt="" style="width: 100px;">
-
-  <h1 style="color: white;"> comming soon not like soon in not pixel XD </h1>
-  <h2 style="color: white;"> crypto hot معا نحقق النجاح 🦾 </h2>
+  
+  <!-- صورة العملة الكبيرة المتحركة تحت الناف بار -->
+  <img src="/coin.png" class="rotating-coin" alt="Rotating Coin">
+  
+  <!-- مربع فتوره السحب -->
+  <div class="airdrop-box">
+    <h1>فتوره السحب</h1>
+    <h2>ابعت لقطة للشاشة للفتوره</h2>
+    <p>عدد عملات York$: <span id="boxYorkBalance">??</span>      <img src="/coin.png" class="small-coin" alt="coin"></p>
+    <button onclick="window.location.href='https://t.me/U_Uog'">اضغط هنا للسحب</button>
+  </div>
 
   <div id="bottomNav">
     <div onclick="window.location.href='/'">🏠 Home</div>
@@ -134,26 +155,26 @@
 
   <script>
     function updateYorkBalance() {
-      const userIdentifier = localStorage.getItem("userIdentifier"); // الحصول على معرف المستخدم
+      const userIdentifier = localStorage.getItem("userIdentifier");
       if (!userIdentifier) {
         document.getElementById('yorkBalance').textContent = "0";
+        document.getElementById('boxYorkBalance').textContent = "0";
         return;
       }
-  
       fetch(`/getUserData?userIdentifier=${userIdentifier}`)
         .then(response => response.json())
         .then(data => {
           if (data.exists) {
             document.getElementById('yorkBalance').textContent = data.yorkBalance;
+            document.getElementById('boxYorkBalance').textContent = data.yorkBalance;
           } else {
             document.getElementById('yorkBalance').textContent = "0";
+            document.getElementById('boxYorkBalance').textContent = "0";
           }
         })
         .catch(error => console.error('Error fetching user data:', error));
     }
-  
     updateYorkBalance(); 
   </script>
-  
 </body>
 </html>
