@@ -125,19 +125,24 @@
         grid-template-columns: repeat(2, 1fr);
       }
     }
+    .lsmall-coin {
+  width: 20px !important;
+  height: 20px !important;
+  vertical-align: middle;
 
+}
   </style>
 </head>
 <body>
   <div class="navbar">
     <div class="marquee">
-      <span class="moving-text" onclick="window.location.href='/airdrop.html'">🎁 Airdrop 🎁</span>
+      <span class="moving-text" onclick="window.location.href='/airdrop.html'"><img src="/coin.png" class="lsmall-coin"> Airdrop <img src="/coin.png" class="lsmall-coin"></span>
     </div>
   </div>
 
   <div class="task-container">
-    <div class="task-box" id="task1" onclick="completeTask(1, 'https://t.me/blockchain_Crypto_Weel')">Join Channel</div>
-    <div class="task-box" id="task2" onclick="completeTask(2, 'https://t.me/supermoneygetfree')">Join Channel</div>
+    <div class="task-box" id="task1" onclick="completeTask(1, '')">Join Channel</div>
+    <div class="task-box" id="task2" onclick="completeTask(2, '')">Join Channel</div>
     <div class="task-box" id="task3" onclick="completeTask(3, '/task3-link')">Task 3</div>
     <div class="task-box" id="task4" onclick="completeTask(4, '/task4-link')">Task 4</div>
     <div class="task-box" id="task5" onclick="completeTask(5, '/task5-link')">Task 5</div>
@@ -161,8 +166,9 @@
 
   <div id="bottomNav">
     <div id="home" onclick="window.location.href='/';">🏠 Home</div>
-    <div id="tasks" onclick="window.location.href='/task.html';">📋 Tasks</div>
     <div id="airdrop" onclick="window.location.href='/games.html';">🎮 Game</div>
+    <div id="tasks" onclick="window.location.href='/task.html';">📋 Tasks</div>
+
   </div>
 
   <script>
