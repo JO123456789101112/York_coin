@@ -7,6 +7,10 @@ const socketIo = require('socket.io');
 
 const app = express();
 const port = process.env.PORT || 3000;
+// middleware يجب أن تكون هنا أولاً
+app.use(express.json());
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'image')));
 
 const server = http.createServer(app);
 const io = socketIo(server, {
@@ -31,7 +35,7 @@ mongoose.connect(mongoURI, {
 /*-------------------
    تعريف النماذج
 -------------------*/
-// نموذج مستخدمين صفحة الدخول واللعبة
+// إضافة خاصية skin لنموذج المستخدم مع قيمة افتراضية
 const userSchema = new mongoose.Schema({
   userIdentifier: { type: String, unique: true },
   name: String,
@@ -43,9 +47,30 @@ const userSchema = new mongoose.Schema({
   gameEntry: {
     mode: { type: String, enum: ['free', 'paid'], default: 'free' },
     cost: { type: Number, default: 0 }
-  }
+  },
+  skin: { type: String, default: "/caracter.png" }  // <-- الخاصية الجديدة
 });
 const User = mongoose.model("User", userSchema);
+
+app.post('/api/buy-skin', async (req, res) => {
+  const { userIdentifier, amount, skin } = req.body;
+  try {
+    let user = await User.findOne({ userIdentifier });
+    if (!user) {
+      return res.json({ success: false, message: "User not found" });
+    }
+    if (user.yorkBalance < amount) {
+      return res.json({ success: false, message: "Insufficient York$" });
+    }
+    user.yorkBalance -= amount;
+    user.skin = skin;  // تحديث السكن برابط الصورة المشتراة
+    await user.save();
+    res.json({ success: true, yorkBalance: user.yorkBalance, skin: user.skin });
+  } catch(err) {
+    console.error(err);
+    res.json({ success: false, message: "Server error" });
+  }
+});
 
 // نموذج اللاعبين داخل اللعبة (Socket.io)
 // تمت إضافة حقل userIdentifier لتتبع اللاعب نفسه وحقل name لتخزين الاسم
@@ -181,19 +206,20 @@ app.post('/saveUserData', async (req, res) => {
 app.get('/getUserData', async (req, res) => {
   const { userIdentifier } = req.query;
   let user = await User.findOne({ userIdentifier });
-
   if (user) {
     res.json({
       exists: true,
       userName: user.name,
       userCounter: user.counter,
       yorkBalance: user.yorkBalance,
-      ipAddress: user.ipAddress
+      ipAddress: user.ipAddress,
+      skin: user.skin   // إرسال الخاصية الجديدة
     });
   } else {
     res.json({ exists: false });
   }
 });
+
 
 app.post('/task-completed', async (req, res) => {
   const { userIdentifier } = req.body;
@@ -374,9 +400,12 @@ app.post('/api/deduct-coin', async (req, res) => {
   }
 });
 
+
 /*-------------------
    بدء الخادم
 -------------------*/
 server.listen(port, () => {
   console.log(`الخادم يعمل على http://localhost:${port}`);
 });
+
+
