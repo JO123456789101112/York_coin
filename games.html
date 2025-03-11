@@ -130,13 +130,19 @@
       color: yellow;
       font-weight: bold;
     }
+    .lsmall-coin {
+  width: 20px !important;
+  height: 20px !important;
+  vertical-align: middle;
+
+}
   </style>
 </head>
 <body>
   <div class="navbar">
-    <div id="yorkAmount">York$ = <span id="yorkBalance">??</span></div>
+    <div id="yorkAmount">York$<img src="/coin.png" class="lsmall-coin"> = <span id="yorkBalance">??</span></div>
     <div class="marquee">
-      <span class="moving-text" onclick="window.location.href='/airdrop.html'">🎁 Airdrop 🎁</span>
+      <span class="moving-text" onclick="window.location.href='/airdrop.html'"><img src="/coin.png" class="lsmall-coin"> Airdrop <img src="/coin.png" class="lsmall-coin"></span>
     </div>
   </div>
 
@@ -147,7 +153,7 @@
 
     <div class="airdrop-option" onclick="joinGame('free', 0)">Free Trial جرب اللعبه </div>-->
     <!-- زر لعبة الحوت الأزرق المُحسّن -->
-    <h4> 1York$ لعبه الحوت الأزرق مقابل ✅</h4>
+    <h4> 1York$ لعبه الحوت الأزرق مقابل <img src="/coin.png" class="lsmall-coin"></h4>
     <div class="blue-whale-button" onclick="joinBlueWhaleGame()">
       <img src="whales_game_two/image/download.jpeg" alt="Shark">
       <span >  لعبه الحوت الأزرق</span>
@@ -156,8 +162,9 @@
 
   <div id="bottomNav">
     <div onclick="window.location.href='/'">🏠 Home</div>
-    <div onclick="window.location.href='/task.html'">📋 Tasks</div>
     <div id="airdrop" onclick="window.location.href='/games.html'">🎮 Game</div>
+    <div onclick="window.location.href='/task.html'">📋 Tasks</div>
+
   </div>
 
   <script>
