@@ -183,6 +183,18 @@
     .modal-content button:hover {
       background-color: #0056b3;
     }
+    .small-coin {
+  width: 10px !important;
+  height: 10px !important;
+  vertical-align: middle;
+
+}
+.lsmall-coin {
+  width: 20px !important;
+  height: 20px !important;
+  vertical-align: middle;
+
+}
   </style>
 </head>
 <body>
@@ -197,7 +209,7 @@
 
   <div class="navbar">
     <div class="marquee">
-      <span class="moving-text" onclick="window.location.href='/airdrop.html'">🎁 Airdrop 🎁</span>
+      <span class="moving-text" onclick="window.location.href='/airdrop.html'"> <img src="/coin.png" class="lsmall-coin"> Airdrop   <img src="/coin.png" class="lsmall-coin"></span>
     </div>
   </div>
   <div id="story-container">
@@ -209,10 +221,10 @@
       <div class="stat-box">
         <div class="stat">
           Clicks: <span id="counter">??</span>
-          <div class="small-text">1000 ➡ 1 York$</div>
+          <div class="small-text">1000 ➡ 1 York$<img src="/coin.png" class="small-coin"></div>
         </div>
         <div class="stat">
-          York$: <span id="york">??</span>
+        York$  <img src="/coin.png" class="small-coin">: <span id="york">??</span>
           <div class="small-text">1000 = 1 Usdt$</div>
         </div>
       </div>
@@ -221,8 +233,9 @@
   </div>
   <div id="bottomNav">
     <div onclick="window.location.href='/'">🏠 Home</div>
-    <div onclick="window.location.href='/task.html'">📋 Tasks</div>
     <div id="airdrop" onclick="window.location.href='/games.html'">🎮 Game</div>
+    <div onclick="window.location.href='/task.html'">📋 Tasks</div>
+
   </div>
   <script>
     // عند تحميل الصفحة، إذا لم يتم تعيين userIdentifier أو userName، تظهر المودال
