@@ -7,22 +7,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Tap Game</title>
   <style>
- body {
-  background-image: url("/background.jpg");
-  background-repeat: no-repeat;  /* عدم تكرار الخلفية */
-  background-size: cover;         /* تغطية كامل الصفحة */
-  background-attachment: fixed;
-  background-position: center;    /* لضبط موضع الصورة في المنتصف */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: white;
-  font-family: 'Poppins', sans-serif;
-  text-align: center;
-  min-height: 450vh;
-  margin: 0;
-}
-
+    body {
+      background-image: url("/background.jpg");
+      background-size: cover;
+      background-attachment: fixed;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      color: white;
+      text-align: center;
+      touch-action: manipulation;
+    }
     .navbar {
       width: 100%;
       background: rgba(0,0,0,0.8);
