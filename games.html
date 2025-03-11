@@ -136,6 +136,26 @@
   vertical-align: middle;
 
 }
+#story-container {
+      position: fixed;
+      right: 10px;
+      top: 50px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    @keyframes waveText {
+      0%,100% { transform: translateY(0); }
+      25% { transform: translateY(-5px); }
+      50% { transform: translateY(5px); }
+      75% { transform: translateY(-5px); }
+    }
+    #logo {
+      width: 90px;
+      height: 110px;
+      cursor: pointer;
+      animation: waveText 1.5s infinite ease-in-out;
+    }
   </style>
 </head>
 <body>
@@ -144,6 +164,10 @@
     <div class="marquee">
       <span class="moving-text" onclick="window.location.href='/airdrop.html'"><img src="/coin.png" class="lsmall-coin"> Airdrop <img src="/coin.png" class="lsmall-coin"></span>
     </div>
+  </div>
+
+  <div id="story-container">
+    <a href="mystory.html"><img src="/boymirror.png" id="logo"></a>
   </div>
 
   <div class="airdrop-container">
