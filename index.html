@@ -141,6 +141,39 @@
     .small-text {
       font-size: small;
     }
+
+
+    #story-container {
+    position: fixed;
+    right: 10px;
+    top: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  @keyframes waveText {
+  0%, 100% { transform: translateY(0); }
+  25% { transform: translateY(-5px); }
+  50% { transform: translateY(5px); }
+  75% { transform: translateY(-5px); }
+}
+  #story-title {
+
+    font-size: 15px;
+    margin-bottom: 5px;
+    font-weight: bold;
+  color: aliceblue;
+  display: inline-block;
+  animation: waveText 1.5s infinite ease-in-out;
+    
+  }
+
+  #logo {
+    width: 70px;
+    height: 80px;
+    cursor: pointer;
+    animation: waveText 1.5s infinite ease-in-out;
+  }
   </style>
 </head>
 <body>
@@ -150,8 +183,15 @@
       <span class="moving-text" onclick="window.location.href='/airdrop.html'">🎁 Airdrop 🎁</span>
     </div>
   </div>
+  <div id="story-container">
+    <h1 id="story-title">STORY</h1>
+    <a href="mystory.html"><img src="/boymirror.png" id="logo"></a>
 
+</div>
   <div class="container">
+
+
+
     <div class="info-box">
       <h1 id="userName">Welcome, User!</h1>
       <div class="stat-box">
