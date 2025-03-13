@@ -72,12 +72,15 @@ app.post('/api/buy-skin', async (req, res) => {
   }
 });
 const WithdrawRequestSchema = new mongoose.Schema({
+    userId: String,
     name: String,
     wallet: String,
     telegram: String,
+    amount: { type: Number, required: true }, // عدد العملات المطلوب سحبها
     status: { type: String, default: "pending" },
     createdAt: { type: Date, default: Date.now }
 });
+
 // نموذج اللاعبين داخل اللعبة (Socket.io)
 // تمت إضافة حقل userIdentifier لتتبع اللاعب نفسه وحقل name لتخزين الاسم
 const PlayerSchema = new mongoose.Schema({
@@ -390,20 +393,47 @@ const WithdrawRequest = mongoose.model("WithdrawRequest", WithdrawRequestSchema)
 
 app.post("/withdraw", async (req, res) => {
     try {
-        const { userId, wallet, telegram } = req.body;
-        if (!userId || !wallet || !telegram) {
+        const { userId, wallet, telegram, amount } = req.body;
+
+        if (!userId || !wallet || !telegram || !amount) {
             return res.status(400).json({ success: false, message: "جميع الحقول مطلوبة" });
         }
 
-        const newWithdrawRequest = new WithdrawRequest({ userId, wallet, telegram });
+        let user = await User.findOne({ userIdentifier: userId });
+
+        if (!user) {
+            return res.json({ success: false, message: "المستخدم غير موجود" });
+        }
+
+        if (user.yorkBalance < amount) {
+            return res.json({ success: false, message: "رصيدك غير كافٍ للسحب" });
+        }
+
+        // خصم المبلغ من رصيد المستخدم
+        user.yorkBalance -= amount;
+        await user.save();
+
+        // حفظ طلب السحب
+        const newWithdrawRequest = new WithdrawRequest({ userId, wallet, telegram, amount });
         await newWithdrawRequest.save();
 
         res.json({ success: true, message: "تم تقديم طلب السحب بنجاح" });
+
     } catch (error) {
-        console.error("خطأ في تقديم طلب السحب", error);
+        console.error("خطأ في تقديم طلب السحب:", error);
         res.status(500).json({ success: false, message: "حدث خطأ داخلي" });
     }
 });
+app.get('/withdraw-requests', async (req, res) => {
+    try {
+        const requests = await WithdrawRequest.find().sort({ createdAt: -1 });
+        res.json({ success: true, requests });
+    } catch (error) {
+        console.error("خطأ في جلب طلبات السحب:", error);
+        res.status(500).json({ success: false, message: "حدث خطأ داخلي" });
+    }
+});
+
 
 app.post('/api/deduct-coin', async (req, res) => {
   const { userIdentifier, amount } = req.body;
