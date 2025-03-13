@@ -72,7 +72,7 @@ app.post('/api/buy-skin', async (req, res) => {
   }
 });
 const WithdrawRequestSchema = new mongoose.Schema({
-    userId: String,
+    name: String,
     wallet: String,
     telegram: String,
     status: { type: String, default: "pending" },
