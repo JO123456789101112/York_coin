@@ -171,6 +171,9 @@ io.on('connection', (socket) => {
     }
   });
 });
+app.get('/games.html', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'games.html'));
+});
 
 // 🔹 تنظيف دوري للإحصائيات القديمة
 setInterval(async () => {
