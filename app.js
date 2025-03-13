@@ -4,7 +4,7 @@ const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 const http = require('http');
 const socketIo = require('socket.io');
-
+const bodyParser = require("body-parser");
 const app = express();
 const port = process.env.PORT || 3000;
 // middleware يجب أن تكون هنا أولاً
