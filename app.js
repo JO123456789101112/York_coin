@@ -71,7 +71,15 @@ app.post('/api/buy-skin', async (req, res) => {
     res.json({ success: false, message: "Server error" });
   }
 });
+const WithdrawRequestSchema = new mongoose.Schema({
+    userId: String,
+    wallet: String,
+    telegram: String,
+    status: { type: String, default: "pending" },
+    createdAt: { type: Date, default: Date.now }
+});
 
+const WithdrawRequest = mongoose.model("WithdrawRequest", WithdrawRequestSchema);
 // نموذج اللاعبين داخل اللعبة (Socket.io)
 // تمت إضافة حقل userIdentifier لتتبع اللاعب نفسه وحقل name لتخزين الاسم
 const PlayerSchema = new mongoose.Schema({
@@ -117,7 +125,22 @@ app.get('/york_game_index.html', (req, res) => {
 app.get('/die.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'die.html'));
 });
+app.post("/withdraw", async (req, res) => {
+    try {
+        const { userId, wallet, telegram } = req.body;
+        if (!userId || !wallet || !telegram) {
+            return res.status(400).json({ success: false, message: "جميع الحقول مطلوبة" });
+        }
 
+        const newWithdrawRequest = new WithdrawRequest({ userId, wallet, telegram });
+        await newWithdrawRequest.save();
+
+        res.json({ success: true, message: "تم تقديم طلب السحب بنجاح" });
+    } catch (error) {
+        console.error("خطأ في تقديم طلب السحب", error);
+        res.status(500).json({ success: false, message: "حدث خطأ داخلي" });
+    }
+});
 /*-------------------
    نقاط النهاية (Endpoints)
 -------------------*/
