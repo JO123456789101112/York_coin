@@ -119,6 +119,62 @@
       font-size: 16px;
       cursor: pointer;
     }
+
+    .withdraw-container {
+  background: rgba(255, 255, 255, 0.1); /* لون شبه شفاف */
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  width: 90%;
+  max-width: 350px;
+  margin: 20px auto;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.withdraw-container h3 {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: yellow;
+}
+
+.withdraw-container label {
+  font-size: 16px;
+  display: block;
+  margin: 10px 0 5px;
+  text-align: left;
+}
+
+.withdraw-container input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  font-size: 16px;
+  outline: none;
+}
+
+.withdraw-container input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.withdraw-container button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  background-color: #28a745;
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.withdraw-container button:hover {
+  background-color: #218838;
+}
+
   </style>
 </head>
 <body>
@@ -132,18 +188,24 @@
     </div>
   </div>
   <img src="/coin.png" class="rotating-coin" alt="Rotating Coin">
-<div class="withdraw-container">
-    <h3>فاتورة السحب</h3>
-      <button id="withdraw-btn">سحب الرصيد</button>
-    <label for="wallet">عنوان المحفظة:</label>
-    <input type="text" id="wallet" placeholder="أدخل عنوان محفظتك">
-    
-    <label for="telegram">اسم مستخدم التلجرام:</label>
-    <input type="text" id="telegram" placeholder="@username">
-    
 
-    <p id="withdraw-message" style="display:none; color:green;"></p>
-</div>
+    <div class="airdrop-box">
+    <p>عدد عملات York$: <span id="boxYorkBalance">??</span>      <img src="/coin.png" class="small-coin" alt="coin"></p>
+  </div>
+    <div class="withdraw-container">
+      <h3>فاتورة السحب</h3>
+
+      <label for="wallet">عنوان المحفظة:</label>
+      <input type="text" id="wallet" placeholder="أدخل عنوان محفظتك">
+      <br>
+      <button id="withdraw-btn">سحب الرصيد</button>
+      <label for="telegram">اسم مستخدم التلجرام:</label>
+      <input type="text" id="telegram" placeholder="@username">
+      
+  
+      <p id="withdraw-message" style="display:none; color:green;"></p>
+
+  </div>
   <div id="bottomNav">
     <div onclick="window.location.href='/'">🏠 Home</div>
     <div onclick="window.location.href='/task.html'">📋 Tasks</div>
@@ -153,7 +215,7 @@
     document.getElementById("withdraw-btn").addEventListener("click", async () => {
     const wallet = document.getElementById("wallet").value;
     const telegram = document.getElementById("telegram").value;
-    const userId = "user123"; // سيتم استبداله لاحقًا بالقيمة الفعلية
+    const name = name; // سيتم استبداله لاحقًا بالقيمة الفعلية
     
     if (!wallet || !telegram) {
         alert("يرجى إدخال جميع الحقول");
@@ -163,7 +225,7 @@
     const response = await fetch("/withdraw", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, wallet, telegram })
+        body: JSON.stringify({ name, wallet, telegram })
     });
     
     const result = await response.json();
