@@ -1,10 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5552195743866818"
-     crossorigin="anonymous"></script>
   <meta charset="UTF-8">
-  <meta name="google-adsense-account" content="ca-pub-5552195743866818">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Airdrop</title>
   <style>
@@ -18,7 +15,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      height: 90vh;
+      height: 100vh;
       margin: 0;
       font-family: 'Poppins', sans-serif;
       color: white;
@@ -43,7 +40,7 @@
     .moving-text {
       display: inline-block;
       white-space: nowrap;
-      animation: moveText 13s linear infinite alternate;
+      animation: moveText 10s linear infinite alternate;
       font-size: 18px;
       font-weight: bold;
       color: yellow;
@@ -53,53 +50,70 @@
       100% { transform: translateX(-100%); }
     }
     .airdrop-box {
-      background-color: black;
+      background-color: rgba(0, 0, 0, 0.7);
       padding: 20px;
       border-radius: 10px;
       margin: 20px 0;
       width: 300px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
     }
-    .airdrop-box h1 {
-      margin: 0 0 10px 0;
-      font-size: 22px;
+    .withdraw-container {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+      width: 90%;
+      max-width: 350px;
+      margin: 20px auto;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
     }
-    .airdrop-box h2 {
-      margin: 0 0 10px 0;
-      font-size: 18px;
+    .withdraw-container h3 {
+      font-size: 20px;
+      margin-bottom: 10px;
+      color: yellow;
     }
-    .airdrop-box p {
-      margin: 5px 0;
-      font-size: 18px;
+    .withdraw-container label {
+      font-size: 16px;
+      display: block;
+      margin: 10px 0 5px;
+      text-align: left;
     }
-    .airdrop-box button {
+    .withdraw-container input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ddd;
+      font-size: 16px;
+      outline: none;
+    }
+    .withdraw-container input:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    }
+    .withdraw-container button {
+      width: 100%;
+      padding: 12px;
       margin-top: 15px;
-      padding: 10px 20px;
-      background-color: #007bff;
+      background-color: #28a745;
       border: none;
       border-radius: 5px;
-      font-size: 16px;
+      font-size: 18px;
       color: white;
       cursor: pointer;
       transition: background-color 0.3s;
     }
-    .airdrop-box button:hover {
-      background-color: #0056b3;
+    .withdraw-container button:hover {
+      background-color: #218838;
     }
-    .rotating-coin {
-      width: 200px;
-      height: 200px;
-      margin: 10px 0;
-      animation: spin 6s linear infinite;
-    }
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-    .small-coin {
-      width: 30px;
-      height: 30px;
-      vertical-align: middle;
-      margin-left: 5px;
+    .success-message {
+      display: none;
+      background: #28a745;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 10px;
+      font-size: 18px;
+      text-align: center;
     }
     #bottomNav {
       display: flex;
@@ -119,65 +133,10 @@
       font-size: 16px;
       cursor: pointer;
     }
-
-    .withdraw-container {
-  background: rgba(255, 255, 255, 0.1); /* لون شبه شفاف */
-  padding: 20px;
-  border-radius: 10px;
-  text-align: center;
-  width: 90%;
-  max-width: 350px;
-  margin: 20px auto;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-}
-
-.withdraw-container h3 {
-  font-size: 20px;
-  margin-bottom: 10px;
-  color: yellow;
-}
-
-.withdraw-container label {
-  font-size: 16px;
-  display: block;
-  margin: 10px 0 5px;
-  text-align: left;
-}
-
-.withdraw-container input {
-  width: 100%;
-  padding: 10px;
-  border-radius: 5px;
-  border: 1px solid #ddd;
-  font-size: 16px;
-  outline: none;
-}
-
-.withdraw-container input:focus {
-  border-color: #007bff;
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-}
-
-.withdraw-container button {
-  width: 100%;
-  padding: 12px;
-  margin-top: 15px;
-  background-color: #28a745;
-  border: none;
-  border-radius: 5px;
-  font-size: 18px;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.withdraw-container button:hover {
-  background-color: #218838;
-}
-
   </style>
 </head>
-<body>
+<body onclick="hideKeyboard()">
+
   <div class="navbar">
     <div id="yorkAmount">
       York$ = <span id="yorkBalance">??</span>
@@ -187,76 +146,75 @@
       <span class="moving-text" onclick="window.location.href='/airdrop.html'">🎁 Airdrop 🎁</span>
     </div>
   </div>
-  <img src="/coin.png" class="rotating-coin" alt="Rotating Coin">
 
-    <div class="airdrop-box">
-    <p>عدد عملات York$: <span id="boxYorkBalance">??</span>      <img src="/coin.png" class="small-coin" alt="coin"></p>
+  <div class="airdrop-box">
+
+
+
+  <div class="withdraw-container">
+    <h3>فاتورة السحب</h3>
+    <label for="wallet">عنوان المحفظة:</label>
+    <input type="text" id="wallet" placeholder="أدخل عنوان محفظتك">
+    
+    <label for="telegram">اسم مستخدم التلجرام:</label>
+    <input type="text" id="telegram" placeholder="@username">
+    <p>عدد عملات York$: <span id="boxYorkBalance">??</span> <img src="/coin.png" class="small-coin" alt="coin"></p>
+    <button id="withdraw-btn">سحب الرصيد</button>
+    
+    <div id="successMessage" class="success-message">تم الطلب بنجاح ✅</div>
   </div>
-    <div class="withdraw-container">
-      <h3>فاتورة السحب</h3>
+</div>
 
-      <label for="wallet">عنوان المحفظة:</label>
-      <input type="text" id="wallet" placeholder="أدخل عنوان محفظتك">
-      <br>
-      <button id="withdraw-btn">سحب الرصيد</button>
-      <label for="telegram">اسم مستخدم التلجرام:</label>
-      <input type="text" id="telegram" placeholder="@username">
-      
-  
-      <p id="withdraw-message" style="display:none; color:green;"></p>
-
-  </div>
   <div id="bottomNav">
     <div onclick="window.location.href='/'">🏠 Home</div>
     <div onclick="window.location.href='/task.html'">📋 Tasks</div>
-    <div id="airdrop" onclick="window.location.href='/games.html'">🎮 Game</div>
+    <div onclick="window.location.href='/games.html'">🎮 Game</div>
   </div>
+
   <script>
     document.getElementById("withdraw-btn").addEventListener("click", async () => {
-    const wallet = document.getElementById("wallet").value;
-    const telegram = document.getElementById("telegram").value;
-    const name = name; // سيتم استبداله لاحقًا بالقيمة الفعلية
-    
-    if (!wallet || !telegram) {
-        alert("يرجى إدخال جميع الحقول");
-        return;
-    }
-    
-    const response = await fetch("/withdraw", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, wallet, telegram })
-    });
-    
-    const result = await response.json();
-    if (result.success) {
-        document.getElementById("withdraw-message").textContent = "تم تقديم طلب السحب بنجاح!";
-        document.getElementById("withdraw-message").style.display = "block";
-    } else {
-        alert("حدث خطأ: " + result.message);
-    }
-});
-    function updateYorkBalance() {
-      const userIdentifier = localStorage.getItem("userIdentifier");
-      if (!userIdentifier) {
-        document.getElementById('yorkBalance').textContent = "0";
-        document.getElementById('boxYorkBalance').textContent = "0";
-        return;
+      const wallet = document.getElementById("wallet").value;
+      const telegram = document.getElementById("telegram").value;
+
+      if (!wallet || !telegram) {
+          alert("يرجى إدخال جميع الحقول");
+          return;
       }
-      fetch(`/getUserData?userIdentifier=${userIdentifier}`)
+
+      const response = await fetch("/withdraw", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ wallet, telegram })
+      });
+
+      const result = await response.json();
+      if (result.success) {
+          document.getElementById("successMessage").style.display = "block";
+          setTimeout(() => {
+              document.getElementById("successMessage").style.display = "none";
+          }, 3000);
+      } else {
+          alert("حدث خطأ: " + result.message);
+      }
+    });
+
+    function updateYorkBalance() {
+      fetch(`/getUserData?userIdentifier=${localStorage.getItem("userIdentifier")}`)
         .then(response => response.json())
         .then(data => {
           if (data.exists) {
             document.getElementById('yorkBalance').textContent = data.yorkBalance;
             document.getElementById('boxYorkBalance').textContent = data.yorkBalance;
-          } else {
-            document.getElementById('yorkBalance').textContent = "0";
-            document.getElementById('boxYorkBalance').textContent = "0";
           }
         })
-        .catch(error => console.error('Error fetching user data:', error));
+        .catch(console.error);
     }
-    updateYorkBalance(); 
+    updateYorkBalance();
+
+    function hideKeyboard() {
+      document.activeElement.blur();
+    }
   </script>
+
 </body>
 </html>
