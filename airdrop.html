@@ -136,7 +136,18 @@
     <h1>فاتوره السحب</h1>
     <h2>ابعت لقطة للشاشة للفاتوره</h2>
     <p>عدد عملات York$: <span id="boxYorkBalance">??</span> <img src="/coin.png" class="small-coin" alt="coin"></p>
-    <button onclick="window.location.href='https://t.me/U_Uog'">اضغط هنا للسحب</button>
+<div class="withdraw-container">
+    <h3>فاتورة السحب</h3>
+    <label for="wallet">عنوان المحفظة:</label>
+    <input type="text" id="wallet" placeholder="أدخل عنوان محفظتك">
+    
+    <label for="telegram">اسم مستخدم التلجرام:</label>
+    <input type="text" id="telegram" placeholder="@username">
+    
+    <button id="withdraw-btn">سحب الرصيد</button>
+    <p id="withdraw-message" style="display:none; color:green;"></p>
+</div>
+
   </div>
   <div id="bottomNav">
     <div onclick="window.location.href='/'">🏠 Home</div>
@@ -144,6 +155,30 @@
     <div id="airdrop" onclick="window.location.href='/games.html'">🎮 Game</div>
   </div>
   <script>
+    document.getElementById("withdraw-btn").addEventListener("click", async () => {
+    const wallet = document.getElementById("wallet").value;
+    const telegram = document.getElementById("telegram").value;
+    const userId = "user123"; // سيتم استبداله لاحقًا بالقيمة الفعلية
+    
+    if (!wallet || !telegram) {
+        alert("يرجى إدخال جميع الحقول");
+        return;
+    }
+    
+    const response = await fetch("/withdraw", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId, wallet, telegram })
+    });
+    
+    const result = await response.json();
+    if (result.success) {
+        document.getElementById("withdraw-message").textContent = "تم تقديم طلب السحب بنجاح!";
+        document.getElementById("withdraw-message").style.display = "block";
+    } else {
+        alert("حدث خطأ: " + result.message);
+    }
+});
     function updateYorkBalance() {
       const userIdentifier = localStorage.getItem("userIdentifier");
       if (!userIdentifier) {
