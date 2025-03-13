@@ -52,7 +52,6 @@
       0% { transform: translateX(100%); }
       100% { transform: translateX(-100%); }
     }
-    /* مربع فتوره السحب */
     .airdrop-box {
       background-color: black;
       padding: 20px;
@@ -86,18 +85,16 @@
     .airdrop-box button:hover {
       background-color: #0056b3;
     }
-    /* صورة العملة الكبيرة المتحركة */
     .rotating-coin {
       width: 200px;
       height: 200px;
-      margin: 10px 0 10px 0; /* ترك مسافة تحت الناف بار */
+      margin: 10px 0;
       animation: spin 6s linear infinite;
     }
     @keyframes spin {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
     }
-    /* الصورة الصغيرة للعملة */
     .small-coin {
       width: 30px;
       height: 30px;
@@ -128,31 +125,24 @@
   <div class="navbar">
     <div id="yorkAmount">
       York$ = <span id="yorkBalance">??</span>
-      <!-- الصورة الصغيرة تظهر بجانب النص -->
       <img src="/coin.png" class="small-coin" alt="coin">
     </div>
     <div class="marquee">
       <span class="moving-text" onclick="window.location.href='/airdrop.html'">🎁 Airdrop 🎁</span>
     </div>
   </div>
-  
-  <!-- صورة العملة الكبيرة المتحركة تحت الناف بار -->
   <img src="/coin.png" class="rotating-coin" alt="Rotating Coin">
-  
-  <!-- مربع فتوره السحب -->
   <div class="airdrop-box">
     <h1>فاتوره السحب</h1>
     <h2>ابعت لقطة للشاشة للفاتوره</h2>
-    <p>عدد عملات York$: <span id="boxYorkBalance">??</span>      <img src="/coin.png" class="small-coin" alt="coin"></p>
+    <p>عدد عملات York$: <span id="boxYorkBalance">??</span> <img src="/coin.png" class="small-coin" alt="coin"></p>
     <button onclick="window.location.href='https://t.me/U_Uog'">اضغط هنا للسحب</button>
   </div>
-
   <div id="bottomNav">
     <div onclick="window.location.href='/'">🏠 Home</div>
     <div onclick="window.location.href='/task.html'">📋 Tasks</div>
     <div id="airdrop" onclick="window.location.href='/games.html'">🎮 Game</div>
   </div>
-
   <script>
     function updateYorkBalance() {
       const userIdentifier = localStorage.getItem("userIdentifier");
