@@ -45,7 +45,7 @@ const userSchema = new mongoose.Schema({
   tasksCompleted: { type: Number, default: 0 },
   yorkBalance: { type: Number, default: 1 },
   lastAwardedCounter: { type: Number, default: 0 },
-  ipAddress:String,
+  ipAddress: { type: String, default: "0.0.0.0" },
   gameEntry: {
     mode: { type: String, enum: ['free', 'paid'], default: 'free' },
     cost: { type: Number, default: 0 }
