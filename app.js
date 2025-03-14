@@ -203,17 +203,15 @@ app.get('/getUserData', async (req, res) => {
 app.post('/saveUserData', async (req, res) => {
   const { userIdentifier, userName } = req.body;
 
-  // الحصول على IP الحقيقي للمستخدم
-let userIp = req.headers['x-forwarded-for'] 
-  ? req.headers['x-forwarded-for'].split(',')[0].trim() 
-  : req.connection.remoteAddress || req.socket.remoteAddress;
+  // الحصول على IP الحقيقي للمستخدم من هيدر "x-forwarded-for"
+  let userIp = req.headers['x-forwarded-for'] 
+    ? req.headers['x-forwarded-for'].split(',')[0].trim() 
+    : req.socket.remoteAddress;
 
-if (userIp.startsWith('::ffff:')) {
-  userIp = userIp.replace('::ffff:', '');
-}
+  if (userIp.startsWith('::ffff:')) {
+    userIp = userIp.replace('::ffff:', '');
+  }
 
-
-  // إذا فشل استخراج IP، استخدم القيمة الافتراضية
   if (!userIp || userIp === "undefined") {
     userIp = "0.0.0.0";
   }
@@ -238,6 +236,7 @@ if (userIp.startsWith('::ffff:')) {
   await user.save();
   res.json({ success: true, ipAddress: user.ipAddress });
 });
+
 
 //*************** */
 
