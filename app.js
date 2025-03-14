@@ -6,7 +6,8 @@ const http = require('http');
 const socketIo = require('socket.io');
 
 const app = express();
-app.set('trust proxy', true);
+app.set('trust proxy', 'loopback, linklocal, uniquelocal');
+
 
 const port = process.env.PORT || 3000;
 // middleware يجب أن تكون هنا أولاً
@@ -203,10 +204,14 @@ app.post('/saveUserData', async (req, res) => {
   const { userIdentifier, userName } = req.body;
 
   // الحصول على IP الحقيقي للمستخدم
-  let userIp = req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress;
-  if (userIp.startsWith('::ffff:')) {
-    userIp = userIp.replace('::ffff:', '');
-  }
+let userIp = req.headers['x-forwarded-for'] 
+  ? req.headers['x-forwarded-for'].split(',')[0].trim() 
+  : req.connection.remoteAddress || req.socket.remoteAddress;
+
+if (userIp.startsWith('::ffff:')) {
+  userIp = userIp.replace('::ffff:', '');
+}
+
 
   // إذا فشل استخراج IP، استخدم القيمة الافتراضية
   if (!userIp || userIp === "undefined") {
@@ -235,6 +240,9 @@ app.post('/saveUserData', async (req, res) => {
 });
 
 //*************** */
+
+console.log("Client IP:", userIp);
+
 
 
 const withdrawalSchema = new mongoose.Schema({
