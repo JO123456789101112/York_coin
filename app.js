@@ -6,9 +6,6 @@ const http = require('http');
 const socketIo = require('socket.io');
 
 const app = express();
-app.set('trust proxy', 'loopback, linklocal, uniquelocal');
-
-
 const port = process.env.PORT || 3000;
 // middleware يجب أن تكون هنا أولاً
 app.use(express.json());
@@ -46,7 +43,7 @@ const userSchema = new mongoose.Schema({
   tasksCompleted: { type: Number, default: 0 },
   yorkBalance: { type: Number, default: 1 },
   lastAwardedCounter: { type: Number, default: 0 },
-  ipAddress: { type: String, default: "0.0.0.0" },
+  ipAddress: String,
   gameEntry: {
     mode: { type: String, enum: ['free', 'paid'], default: 'free' },
     cost: { type: Number, default: 0 }
@@ -181,40 +178,9 @@ app.post('/increment', async (req, res) => {
   res.json({ userCounter: user.counter, yorkBalance: user.yorkBalance, userName: user.name });
 });
 
-
-app.get('/getUserData', async (req, res) => {
-  const { userIdentifier } = req.query;
-  let user = await User.findOne({ userIdentifier });
-
-  if (user) {
-    res.json({
-      exists: true,
-      userName: user.name,
-      userCounter: user.counter,
-      yorkBalance: user.yorkBalance,
-      ipAddress: user.ipAddress, // استرجاع عنوان IP
-      skin: user.skin
-    });
-  } else {
-    res.json({ exists: false });
-  }
-});
-
 app.post('/saveUserData', async (req, res) => {
   const { userIdentifier, userName } = req.body;
-
-  // الحصول على IP الحقيقي للمستخدم من هيدر "x-forwarded-for"
-  let userIp = req.headers['x-forwarded-for'] 
-    ? req.headers['x-forwarded-for'].split(',')[0].trim() 
-    : req.socket.remoteAddress;
-
-  if (userIp.startsWith('::ffff:')) {
-    userIp = userIp.replace('::ffff:', '');
-  }
-
-  if (!userIp || userIp === "undefined") {
-    userIp = "0.0.0.0";
-  }
+  const userIp = req.ip;
 
   let user = await User.findOne({ userIdentifier });
 
@@ -234,14 +200,26 @@ app.post('/saveUserData', async (req, res) => {
   }
 
   await user.save();
-  res.json({ success: true, ipAddress: user.ipAddress });
+  res.json({ success: true });
 });
 
-
+app.get('/getUserData', async (req, res) => {
+  const { userIdentifier } = req.query;
+  let user = await User.findOne({ userIdentifier });
+  if (user) {
+    res.json({
+      exists: true,
+      userName: user.name,
+      userCounter: user.counter,
+      yorkBalance: user.yorkBalance,
+      ipAddress: user.ipAddress,
+      skin: user.skin   // إرسال الخاصية الجديدة
+    });
+  } else {
+    res.json({ exists: false });
+  }
+});
 //*************** */
-
-console.log("Client IP:", userIp);
-
 
 
 const withdrawalSchema = new mongoose.Schema({
