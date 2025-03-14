@@ -177,30 +177,6 @@ app.post('/increment', async (req, res) => {
   await user.save();
   res.json({ userCounter: user.counter, yorkBalance: user.yorkBalance, userName: user.name });
 });
-app.post('/saveUserData', async (req, res) => {
-  const { userIdentifier, userName } = req.body;
-  const userIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress; // جلب عنوان IP
-
-  let user = await User.findOne({ userIdentifier });
-
-  if (user) {
-    user.name = userName;
-    user.ipAddress = userIp;
-  } else {
-    user = new User({ 
-      userIdentifier, 
-      name: userName, 
-      counter: 0, 
-      tasksCompleted: 0, 
-      yorkBalance: 1,
-      lastAwardedCounter: 0,
-      ipAddress: userIp
-    });
-  }
-
-  await user.save();
-  res.json({ success: true, ipAddress: userIp });
-});
 
 
 app.get('/getUserData', async (req, res) => {
@@ -219,6 +195,32 @@ app.get('/getUserData', async (req, res) => {
   } else {
     res.json({ exists: false });
   }
+});
+app.post('/saveUserData', async (req, res) => {
+  const { userIdentifier, userName } = req.body;
+
+  // الحصول على IP الحقيقي للمستخدم
+  const userIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+
+  let user = await User.findOne({ userIdentifier });
+
+  if (user) {
+    user.name = userName;
+    user.ipAddress = userIp;
+  } else {
+    user = new User({ 
+      userIdentifier, 
+      name: userName, 
+      counter: 0, 
+      tasksCompleted: 0, 
+      yorkBalance: 1,
+      lastAwardedCounter: 0,
+      ipAddress: userIp // حفظ عنوان IP
+    });
+  }
+
+  await user.save();
+  res.json({ success: true, ipAddress: user.ipAddress });
 });
 
 //*************** */
