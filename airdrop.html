@@ -244,19 +244,24 @@ document.querySelectorAll('input').forEach(input => {
 });
 document.addEventListener("DOMContentLoaded", function () {
     const inputs = document.querySelectorAll("input");
+    const withdrawButton = document.getElementById("withdraw-btn");
 
     inputs.forEach((input, index) => {
         input.addEventListener("keydown", function (event) {
             if (event.key === "Enter") {
-                event.preventDefault(); // منع السلوك الافتراضي للزر
-                const nextInput = inputs[index + 1]; // الحصول على الحقل التالي
+                event.preventDefault(); // منع السلوك الافتراضي
+
+                const nextInput = inputs[index + 1]; // تحديد الحقل التالي
                 if (nextInput) {
-                    nextInput.focus(); // نقل التركيز للحقل التالي
+                    nextInput.focus(); // الانتقال إلى الحقل التالي
+                } else {
+                    withdrawButton.click(); // إذا كان آخر حقل، ينقر الزر
                 }
             }
         });
     });
 });
+
 
 
     
