@@ -195,6 +195,10 @@ background-color: #000;
   vertical-align: middle;
 
 }
+.tapped {
+    animation: tapEffect 0.2s ease-in-out;
+}
+
   </style>
 </head>
 <body>
@@ -291,17 +295,29 @@ background-color: #000;
     }
   
     document.getElementById('tapImage').addEventListener('click', function () {
-      fetch('/increment', {
+    let tapImage = this;
+    
+    // إضافة كلاس الأنيميشن
+    tapImage.classList.add('tapped');
+
+    // إزالة الكلاس بعد انتهاء الأنيميشن
+    setTimeout(() => {
+        tapImage.classList.remove('tapped');
+    }, 200); // نفس مدة الأنيميشن
+
+    // تنفيذ طلب الزيادة
+    fetch('/increment', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userIdentifier, userName })
-      })
-      .then(response => response.json())
-      .then(data => {
+    })
+    .then(response => response.json())
+    .then(data => {
         updateUI(data.userCounter, data.yorkBalance);
-      })
-      .catch(err => console.error('Error:', err));
-    });
+    })
+    .catch(err => console.error('Error:', err));
+});
+
   
     loadUserData();
   </script>
