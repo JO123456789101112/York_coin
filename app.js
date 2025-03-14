@@ -200,7 +200,11 @@ app.post('/saveUserData', async (req, res) => {
   const { userIdentifier, userName } = req.body;
 
   // الحصول على IP الحقيقي للمستخدم
-  const userIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+let userIp = req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress;
+if (userIp.startsWith('::ffff:')) {
+    userIp = userIp.replace('::ffff:', ''); // تحويل IPv6-mapped IPv4 إلى IPv4
+}
+
 
   let user = await User.findOne({ userIdentifier });
 
