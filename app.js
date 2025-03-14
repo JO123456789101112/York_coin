@@ -71,15 +71,6 @@ app.post('/api/buy-skin', async (req, res) => {
     res.json({ success: false, message: "Server error" });
   }
 });
-const WithdrawRequestSchema = new mongoose.Schema({
-    userId: String,
-    name: String,
-    wallet: String,
-    telegram: String,
-    amount: { type: Number, required: true }, // عدد العملات المطلوب سحبها
-    status: { type: String, default: "pending" },
-    createdAt: { type: Date, default: Date.now }
-});
 
 // نموذج اللاعبين داخل اللعبة (Socket.io)
 // تمت إضافة حقل userIdentifier لتتبع اللاعب نفسه وحقل name لتخزين الاسم
@@ -228,7 +219,55 @@ app.get('/getUserData', async (req, res) => {
     res.json({ exists: false });
   }
 });
+//*************** */
 
+
+const withdrawalSchema = new mongoose.Schema({
+  userIdentifier: String,
+  name: String,
+  wallet: String,
+  amount: Number, // عدد العملات المسحوبة
+  usdAmount: Number, // عدد الدولارات المحسوبة
+  date: { type: Date, default: Date.now },
+  status: { type: String, default: "pending" }  // حالة السحب
+});
+
+// تجنب إعادة تعريف النموذج
+const Withdrawal = mongoose.models.Withdrawal || mongoose.model('Withdrawal', withdrawalSchema);
+
+app.post('/withdraw', async (req, res) => {
+const { userIdentifier, name, wallet, amount } = req.body;
+
+try {
+    let user = await User.findOne({ userIdentifier });
+
+    if (!user) {
+        return res.json({ success: false, message: "المستخدم غير موجود" });
+    }
+
+    if (user.yorkBalance < amount) {
+        return res.json({ success: false, message: "رصيد غير كافٍ للسحب" });
+    }
+
+    // خصم المبلغ من الرصيد
+    user.yorkBalance -= amount;
+    await user.save();
+
+    // حساب المبلغ بالدولار (1 دولار لكل 1000 عملة)
+    const usdAmount = amount / 1000;
+
+    // تسجيل طلب السحب في قاعدة البيانات
+    await new Withdrawal({ userIdentifier, name, wallet, amount, usdAmount }).save();
+
+    res.json({ success: true, message: "تم إرسال طلب السحب بنجاح!" });
+
+} catch (err) {
+    console.error(err);
+    res.json({ success: false, message: "حدث خطأ أثناء معالجة الطلب" });
+}
+});
+
+//*************************** */
 
 app.post('/task-completed', async (req, res) => {
   const { userIdentifier } = req.body;
@@ -389,51 +428,6 @@ app.post('/api/update-game-coins', async (req, res) => {
     res.json({ success: false, message: "Server error" });
   }
 });
-const WithdrawRequest = mongoose.model("WithdrawRequest", WithdrawRequestSchema);
-
-app.post("/withdraw", async (req, res) => {
-    try {
-        const { userId, wallet, telegram, amount } = req.body;
-
-        if (!userId || !wallet || !telegram || !amount) {
-            return res.status(400).json({ success: false, message: "جميع الحقول مطلوبة" });
-        }
-
-        let user = await User.findOne({ userIdentifier: userId });
-
-        if (!user) {
-            return res.json({ success: false, message: "المستخدم غير موجود" });
-        }
-
-        if (user.yorkBalance < amount) {
-            return res.json({ success: false, message: "رصيدك غير كافٍ للسحب" });
-        }
-
-        // خصم المبلغ من رصيد المستخدم
-        user.yorkBalance -= amount;
-        await user.save();
-
-        // حفظ طلب السحب
-        const newWithdrawRequest = new WithdrawRequest({ userId, wallet, telegram, amount });
-        await newWithdrawRequest.save();
-
-        res.json({ success: true, message: "تم تقديم طلب السحب بنجاح" });
-
-    } catch (error) {
-        console.error("خطأ في تقديم طلب السحب:", error);
-        res.status(500).json({ success: false, message: "حدث خطأ داخلي" });
-    }
-});
-app.get('/withdraw-requests', async (req, res) => {
-    try {
-        const requests = await WithdrawRequest.find().sort({ createdAt: -1 });
-        res.json({ success: true, requests });
-    } catch (error) {
-        console.error("خطأ في جلب طلبات السحب:", error);
-        res.status(500).json({ success: false, message: "حدث خطأ داخلي" });
-    }
-});
-
 
 app.post('/api/deduct-coin', async (req, res) => {
   const { userIdentifier, amount } = req.body;
@@ -461,5 +455,4 @@ app.post('/api/deduct-coin', async (req, res) => {
 server.listen(port, () => {
   console.log(`الخادم يعمل على http://localhost:${port}`);
 });
-
 
