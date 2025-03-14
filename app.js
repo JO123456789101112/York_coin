@@ -206,19 +206,21 @@ app.post('/saveUserData', async (req, res) => {
 app.get('/getUserData', async (req, res) => {
   const { userIdentifier } = req.query;
   let user = await User.findOne({ userIdentifier });
+
   if (user) {
     res.json({
       exists: true,
       userName: user.name,
       userCounter: user.counter,
       yorkBalance: user.yorkBalance,
-      ipAddress: user.ipAddress,
-      skin: user.skin   // إرسال الخاصية الجديدة
+      ipAddress: user.ipAddress, // استرجاع عنوان IP
+      skin: user.skin
     });
   } else {
     res.json({ exists: false });
   }
 });
+
 //*************** */
 
 
