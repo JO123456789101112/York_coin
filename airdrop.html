@@ -228,6 +228,21 @@
   </div>
 
   <script>
+    window.addEventListener('resize', function () {
+    if (window.innerHeight < 500) { // عند فتح الكيبورد، تقليل ارتفاع الصفحة
+        document.body.style.height = "auto";
+    } else {
+        document.body.style.height = "90vh";
+    }
+});
+document.querySelectorAll('input').forEach(input => {
+    input.addEventListener('focus', () => {
+        setTimeout(() => {
+            window.scrollTo(0, document.body.scrollHeight);
+        }, 300);
+    });
+});
+
 document.getElementById("amount").addEventListener("input", () => {
     const amount = parseInt(document.getElementById("amount").value) || 0;
     const usdEquivalent = amount / 1000; // تحويل كل 1000 York$ إلى 1 دولار
