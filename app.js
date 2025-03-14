@@ -6,6 +6,8 @@ const http = require('http');
 const socketIo = require('socket.io');
 
 const app = express();
+app.set('trust proxy', true);
+
 const port = process.env.PORT || 3000;
 // middleware يجب أن تكون هنا أولاً
 app.use(express.json());
