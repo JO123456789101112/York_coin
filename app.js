@@ -177,10 +177,9 @@ app.post('/increment', async (req, res) => {
   await user.save();
   res.json({ userCounter: user.counter, yorkBalance: user.yorkBalance, userName: user.name });
 });
-
 app.post('/saveUserData', async (req, res) => {
   const { userIdentifier, userName } = req.body;
-  const userIp = req.ip;
+  const userIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress; // جلب عنوان IP
 
   let user = await User.findOne({ userIdentifier });
 
@@ -200,8 +199,9 @@ app.post('/saveUserData', async (req, res) => {
   }
 
   await user.save();
-  res.json({ success: true });
+  res.json({ success: true, ipAddress: userIp });
 });
+
 
 app.get('/getUserData', async (req, res) => {
   const { userIdentifier } = req.query;
