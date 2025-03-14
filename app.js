@@ -198,15 +198,20 @@ app.get('/getUserData', async (req, res) => {
     res.json({ exists: false });
   }
 });
+
 app.post('/saveUserData', async (req, res) => {
   const { userIdentifier, userName } = req.body;
 
   // الحصول على IP الحقيقي للمستخدم
-let userIp = req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress;
-if (userIp.startsWith('::ffff:')) {
-    userIp = userIp.replace('::ffff:', ''); // تحويل IPv6-mapped IPv4 إلى IPv4
-}
+  let userIp = req.headers['x-forwarded-for']?.split(',')[0] || req.socket.remoteAddress;
+  if (userIp.startsWith('::ffff:')) {
+    userIp = userIp.replace('::ffff:', '');
+  }
 
+  // إذا فشل استخراج IP، استخدم القيمة الافتراضية
+  if (!userIp || userIp === "undefined") {
+    userIp = "0.0.0.0";
+  }
 
   let user = await User.findOne({ userIdentifier });
 
@@ -221,7 +226,7 @@ if (userIp.startsWith('::ffff:')) {
       tasksCompleted: 0, 
       yorkBalance: 1,
       lastAwardedCounter: 0,
-      ipAddress: userIp // حفظ عنوان IP
+      ipAddress: userIp
     });
   }
 
