@@ -1,26 +1,5 @@
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,7 +11,7 @@
   <title>Task Page</title>
   <style>
     body {
-  background: linear-gradient(to bottom, red, orange);
+      background: linear-gradient(135deg, #000000, #ff0000);
 
       background-size: cover;
       background-attachment: fixed;
@@ -46,35 +25,37 @@
       overflow: hidden;
     }
 
+
     .navbar {
-      width: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      position: fixed;
-      top: 0;
-      left: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 10px 0;
-      box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.5);
-      overflow: hidden;
-    }
-
-    .marquee {
-      width: 100%;
-      overflow: hidden;
-      white-space: nowrap;
-      position: relative;
-    }
-
-    .moving-text {
-      display: inline-block;
-      white-space: nowrap;
-      animation: moveText 13s linear infinite alternate;
-      font-size: 18px;
-      font-weight: bold;
-      color: yellow;
-    }
+    width: 100%;
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 0;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  }
+  .marquee {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+  }
+  .moving-text {
+    display: inline-block;
+    animation: moveText 13s linear infinite alternate;
+    font-size: 18px;
+    font-weight: bold;
+    color: #f1c40f;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.1);
+  }
 
     @keyframes moveText {
       0% { transform: translateX(100%); }
@@ -103,29 +84,36 @@
     .task-box:hover {
       background-color: rgba(255, 255, 255, 0.2);
     }
-
     #bottomNav {
-      display: flex;
-      justify-content: space-around;
-      width: 100%;
-      background-color: rgba(0, 0, 0, 0.7);
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      padding: 10px 0;
-    }
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    position: fixed;
+    bottom: 0;
+    padding: 12px 0;
+    border-top: 2px solid rgba(255, 255, 255, 0.2);
+  }
+  #bottomNav div {
+    color: white;
+    flex: 1;
+    text-align: center;
+    padding: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    border-radius: 10px;
+  }
+  #bottomNav div:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+  }
+  #airdrop {
+    color: #f1c40f;
+    font-weight: bold;
+  }
 
-    #bottomNav div {
-      color: white;
-      text-align: center;
-      flex: 1;
-      padding: 5px;
-      cursor: pointer;
-    }
-
-    #bottomNav div:hover {
-      background-color: rgba(255, 255, 255, 0.2);
-    }
 
     @media (max-width: 600px) {
       .task-container {
@@ -158,7 +146,7 @@
 <body>
   <div class="navbar">
     <div class="marquee">
-      <span class="moving-text" onclick="window.location.href='/airdrop.html'"><img src="/coin.png" class="lsmall-coin"> Airdrop <img src="/coin.png" class="lsmall-coin"></span>
+      <span class="moving-text" onclick="window.location.href='/airdrop.html'"> <img src="/coin.png" class="lsmall-coin"> Airdrop   <img src="/coin.png" class="lsmall-coin"></span>
     </div>
   </div>
 
@@ -187,10 +175,10 @@
 
 
   <div id="bottomNav">
-    <div id="home" onclick="window.location.href='/';">🏠 Home</div>
-    <div id="airdrop" onclick="window.location.href='/games.html';">🎮 Game</div>
-    <div id="tasks" onclick="window.location.href='/task.html';">📋 Tasks</div>
-
+    <div onclick="window.location.href='/'">Home</div>
+    <div id="airdrop" onclick="window.location.href='/games.html'">Game</div>
+    <div onclick="window.location.href='/task.html'">Tasks</div>
+    <div id="airdrop" onclick="window.location.href='/airdrop.html'">Airdrop</div>
   </div>
 
   <script>
