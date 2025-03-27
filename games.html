@@ -9,7 +9,7 @@
   <title>Airdrop</title>
   <style>
     body {
-      background: linear-gradient(to bottom, #0000FF, #ADD8E6);
+      background: linear-gradient(135deg, #000000, #ff0000);
       background-position: center;
       background-size: cover;
       background-attachment: fixed;
@@ -24,29 +24,35 @@
       text-align: center;
     }
     .navbar {
-      width: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      position: fixed;
-      top: 0;
-      left: 0;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 20px;
-      box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.5);
-    }
-    .marquee {
-      overflow: hidden;
-      white-space: nowrap;
-    }
-    .moving-text {
-      display: inline-block;
-      white-space: nowrap;
-      animation: moveText 13s linear infinite alternate;
-      font-size: 18px;
-      font-weight: bold;
-      color: yellow;
-    }
+    width: 100%;
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 0;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  }
+  .marquee {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+  }
+  .moving-text {
+    display: inline-block;
+    animation: moveText 13s linear infinite alternate;
+    font-size: 18px;
+    font-weight: bold;
+    color: #f1c40f;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.1);
+  }
     @keyframes moveText {
       0% { transform: translateX(100%); }
       100% { transform: translateX(-100%); }
@@ -107,28 +113,36 @@
       50% { transform: translateX(10px); }
       100% { transform: translateX(0); }
     }
+  
     #bottomNav {
-      display: flex;
-      justify-content: space-around;
-      width: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      padding: 10px 0;
-    }
-    #bottomNav div {
-      color: white;
-      flex: 1;
-      text-align: center;
-      padding: 10px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    #airdrop {
-      color: yellow;
-      font-weight: bold;
-    }
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    position: fixed;
+    bottom: 0;
+    padding: 12px 0;
+    border-top: 2px solid rgba(255, 255, 255, 0.2);
+  }
+  #bottomNav div {
+    color: white;
+    flex: 1;
+    text-align: center;
+    padding: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    border-radius: 10px;
+  }
+  #bottomNav div:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+  }
+  #airdrop {
+    color: #f1c40f;
+    font-weight: bold;
+  }
     .lsmall-coin {
   width: 20px !important;
   height: 20px !important;
@@ -184,10 +198,10 @@
   </div>
 
   <div id="bottomNav">
-    <div onclick="window.location.href='/'">🏠 Home</div>
-    <div id="airdrop" onclick="window.location.href='/games.html'">🎮 Game</div>
-    <div onclick="window.location.href='/task.html'">📋 Tasks</div>
-
+    <div onclick="window.location.href='/'">Home</div>
+    <div id="airdrop" onclick="window.location.href='/games.html'">Game</div>
+    <div onclick="window.location.href='/task.html'">Tasks</div>
+    <div id="airdrop" onclick="window.location.href='/airdrop.html'">Airdrop</div>
   </div>
 
   <script>
