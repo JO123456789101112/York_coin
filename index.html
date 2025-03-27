@@ -237,10 +237,12 @@ body {
   </div>
 
   <div class="navbar">
+    <div id="yorkAmount">York$<img src="/coin.png" class="lsmall-coin"> = <span id="yorkBalance">??</span></div>
     <div class="marquee">
-      <span class="moving-text" onclick="window.location.href='/airdrop.html'"> <img src="/coin.png" class="lsmall-coin"> Airdrop   <img src="/coin.png" class="lsmall-coin"></span>
+      <span class="moving-text" onclick="window.location.href='/airdrop.html'"><img src="/coin.png" class="lsmall-coin"> Airdrop <img src="/coin.png" class="lsmall-coin"></span>
     </div>
   </div>
+
   <div id="story-container">
     <a href="mystory.html"><img src="/boymirror.png" id="logo"></a>
   </div>
@@ -270,6 +272,25 @@ body {
     <div id="airdrop" onclick="window.location.href='/airdrop.html'">Airdrop</div>
   </div>
   <script>
+
+function updateYorkBalance() {
+      const userIdentifier = localStorage.getItem("userIdentifier");
+      if (!userIdentifier) {
+        document.getElementById('yorkBalance').textContent = "0";
+        return;
+      }
+      fetch(`/getUserData?userIdentifier=${userIdentifier}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.exists) {
+            document.getElementById('yorkBalance').textContent = data.yorkBalance;
+          } else {
+            document.getElementById('yorkBalance').textContent = "0";
+          }
+        })
+        .catch(error => console.error('Error fetching user data:', error));
+    }
+    updateYorkBalance();
     // عند تحميل الصفحة، إذا لم يتم تعيين userIdentifier أو userName، تظهر المودال
     let userIdentifier = localStorage.getItem('userIdentifier');
     let userName = localStorage.getItem('userName');
