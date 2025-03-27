@@ -7,47 +7,52 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>Tap Game</title>
   <style>
-    body {
+body {
 
-      background: linear-gradient(to bottom, white, red);
-      background-size: cover;
-      background-attachment: fixed;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      font-family: 'Poppins', sans-serif;
-      color: white;
-      text-align: center;
-      touch-action: manipulation;
-    }
-    .navbar {
-      width: 100%;
-      background: rgba(0,0,0,0.8);
-      position: fixed;
-      top: 0;
-      left: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 10px 0;
-      box-shadow: 0px 2px 10px rgba(0,0,0,0.5);
-    }
-    .marquee {
-      width: 100%;
-      overflow: hidden;
-      white-space: nowrap;
-      position: relative;
-    }
-    .moving-text {
-      display: inline-block;
-      animation: moveText 13s linear infinite alternate;
-      font-size: 18px;
-      font-weight: bold;
-      color: yellow;
-      cursor: pointer;
-    }
+  background: linear-gradient(135deg, #000000, #ff0000);
+  background-size: cover;
+  background-attachment: fixed;
+  display: flex;
+    flex-direction: column;
+    align-items: center;
+  height: 100vh;
+  margin: 0;
+  font-family: 'Poppins', sans-serif;
+  color: white;
+  text-align: center;
+  touch-action: manipulation;
+}
+
+.navbar {
+    width: 100%;
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 0;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  }
+  .marquee {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+  }
+  .moving-text {
+    display: inline-block;
+    animation: moveText 13s linear infinite alternate;
+    font-size: 18px;
+    font-weight: bold;
+    color: #f1c40f;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.1);
+  }
     @keyframes moveText {
       0% { transform: translateX(100%); }
       100% { transform: translateX(-100%); }
@@ -100,27 +105,36 @@
       50% { transform: scale(0.9); }
       100% { transform: scale(1); }
     }
+  
     #bottomNav {
-      display: flex;
-      justify-content: space-around;
-      width: 100%;
-      background: rgba(0,0,0,0.7);
-      position: fixed;
-      bottom: 0;
-      padding: 10px 0;
-    }
-    #bottomNav div {
-      color: white;
-      flex: 1;
-      text-align: center;
-      padding: 10px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-    #airdrop {
-      color: yellow;
-      font-weight: bold;
-    }
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    position: fixed;
+    bottom: 0;
+    padding: 12px 0;
+    border-top: 2px solid rgba(255, 255, 255, 0.2);
+  }
+  #bottomNav div {
+    color: white;
+    flex: 1;
+    text-align: center;
+    padding: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    border-radius: 10px;
+  }
+  #bottomNav div:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+  }
+  #airdrop {
+    color: #f1c40f;
+    font-weight: bold;
+  }
     .small-text {
       font-size: small;
     }
@@ -200,14 +214,16 @@
     animation: tapEffect 0.2s ease-in-out;
 }
 .info-box {
-  background: url('/bgsmall.jpg') no-repeat center center; /* تعيين الصورة كخلفية */
+  /* background: url('/bgsmall.jpg') no-repeat center center; تعيين الصورة كخلفية */
   background-size: cover; /* يحافظ على الأبعاد الأصلية */
   padding: 15px 25px;
   border-radius: 12px;
   box-shadow: 0px 4px 10px rgba(0,0,0,0.5);
   margin-bottom: 15px;
-  color: white; /* لضمان وضوح النص */
+  color: rgb(255, 255, 255); /* لضمان وضوح النص */
+  background-color: #000000;
 }
+
   </style>
 </head>
 <body>
@@ -222,14 +238,17 @@
 
   <div class="navbar">
     <div class="marquee">
-      <span class="moving-text" onclick="window.location.href='/airdrop.html'"> <img src="/coin.png" class="lsmall-coin"> Airdrop  سحب <img src="/coin.png" class="lsmall-coin"></span>
+      <span class="moving-text" onclick="window.location.href='/airdrop.html'"> <img src="/coin.png" class="lsmall-coin"> Airdrop   <img src="/coin.png" class="lsmall-coin"></span>
     </div>
   </div>
   <div id="story-container">
     <a href="mystory.html"><img src="/boymirror.png" id="logo"></a>
   </div>
+
   <div class="container">
     <div class="info-box">
+
+
       <h1 id="userName">Welcome, User!</h1>
       <div class="stat-box">
         <div class="stat">
@@ -245,10 +264,10 @@
     <img src="/caracter.png" id="tapImage" alt="Tap to earn points">
   </div>
   <div id="bottomNav">
-    <div onclick="window.location.href='/'">🏠 Home</div>
-    <div id="airdrop" onclick="window.location.href='/games.html'">🎮 Game</div>
-    <div onclick="window.location.href='/task.html'">📋 Tasks</div>
-
+    <div onclick="window.location.href='/'">Home</div>
+    <div id="airdrop" onclick="window.location.href='/games.html'">Game</div>
+    <div onclick="window.location.href='/task.html'">Tasks</div>
+    <div id="airdrop" onclick="window.location.href='/airdrop.html'">Airdrop</div>
   </div>
   <script>
     // عند تحميل الصفحة، إذا لم يتم تعيين userIdentifier أو userName، تظهر المودال
