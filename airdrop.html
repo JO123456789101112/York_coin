@@ -9,7 +9,8 @@
   <title>Airdrop</title>
   <style>
     body {
-background: linear-gradient(to bottom, #32CD32, #FFFFFF);
+
+      background: linear-gradient(135deg, #000000, #ff0000);
       background-repeat: no-repeat;
       background-position: center;
       background-size: cover;
@@ -27,29 +28,35 @@ background: linear-gradient(to bottom, #32CD32, #FFFFFF);
         padding-top: 80px;
     }
     .navbar {
-      width: 100%;
-      background: rgba(0, 0, 0, 0.8);
-      position: fixed;
-      top: 0;
-      left: 0;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 10px 20px;
-      box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.5);
-    }
-    .marquee {
-      overflow: hidden;
-      white-space: nowrap;
-    }
-    .moving-text {
-      display: inline-block;
-      white-space: nowrap;
-      animation: moveText 13s linear infinite alternate;
-      font-size: 18px;
-      font-weight: bold;
-      color: yellow;
-    }
+    width: 100%;
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 0;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+  }
+  .marquee {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    position: relative;
+  }
+  .moving-text {
+    display: inline-block;
+    animation: moveText 13s linear infinite alternate;
+    font-size: 18px;
+    font-weight: bold;
+    color: #f1c40f;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.1);
+  }
     @keyframes moveText {
       0% { transform: translateX(100%); }
       100% { transform: translateX(-100%); }
@@ -101,24 +108,34 @@ background: linear-gradient(to bottom, #32CD32, #FFFFFF);
       margin-left: 5px;
     }
     #bottomNav {
-      display: flex;
-      justify-content: space-around;
-      width: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      padding: 10px 0;
-    }
-    #bottomNav div {
-      color: white;
-      flex: 1;
-      text-align: center;
-      padding: 10px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    position: fixed;
+    bottom: 0;
+    padding: 12px 0;
+    border-top: 2px solid rgba(255, 255, 255, 0.2);
+  }
+  #bottomNav div {
+    color: white;
+    flex: 1;
+    text-align: center;
+    padding: 12px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    border-radius: 10px;
+  }
+  #bottomNav div:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+  }
+  #airdrop {
+    color: #f1c40f;
+    font-weight: bold;
+  }
     .withdraw-container {
   background: rgba(255, 255, 255, 0.1); /* لون شبه شفاف */
   padding: 20px;
@@ -183,7 +200,7 @@ background: linear-gradient(to bottom, #32CD32, #FFFFFF);
       <img src="/coin.png" class="small-coin" alt="coin">
     </div>
     <div class="marquee">
-      <span class="moving-text" onclick="window.location.href='/airdrop.html'">🎁 Airdrop 🎁</span>
+      <span class="moving-text" onclick="window.location.href='/airdrop.html'"> <img src="/coin.png" class="small-coin"> Airdrop   <img src="/coin.png" class="small-coin"></span>
     </div>
   </div>
 
@@ -216,9 +233,10 @@ background: linear-gradient(to bottom, #32CD32, #FFFFFF);
 
 
   <div id="bottomNav">
-    <div onclick="window.location.href='/'">🏠 Home</div>
-    <div onclick="window.location.href='/task.html'">📋 Tasks</div>
-    <div id="airdrop" onclick="window.location.href='/games.html'">🎮 Game</div>
+    <div onclick="window.location.href='/'">Home</div>
+    <div id="airdrop" onclick="window.location.href='/games.html'">Game</div>
+    <div onclick="window.location.href='/task.html'">Tasks</div>
+    <div id="airdrop" onclick="window.location.href='/airdrop.html'">Airdrop</div>
   </div>
   
   <img src="/coin.png" class="rotating-coin" alt="Rotating Coin">
